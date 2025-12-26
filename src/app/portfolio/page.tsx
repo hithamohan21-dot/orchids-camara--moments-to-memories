@@ -137,52 +137,49 @@ export default function PortfolioPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               <AnimatePresence mode="popLayout">
-                {filteredItems.map((item) => (
-                  <motion.div
-                    key={item.id || item.title}
-                    layout
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.4 }}
-                    className="group relative aspect-[4/5] rounded-3xl overflow-hidden cursor-pointer bg-neutral-900"
-                    onMouseEnter={() => item.type === 'videography' && setHoveredVideo(item.id || item.title)}
-                    onMouseLeave={() => setHoveredVideo(null)}
-                    onClick={() => {
-                      if (item.type === 'videography' && item.videoUrl) {
-                        setSelectedVideo(item.videoUrl);
-                      }
-                    }}
-                  >
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className={`object-cover transition-all duration-700 group-hover:scale-110 ${hoveredVideo === (item.id || item.title) ? 'opacity-0' : 'opacity-70 group-hover:opacity-100'}`}
-                    />
-                    
-                    {item.type === 'videography' && item.videoUrl && hoveredVideo === (item.id || item.title) && (
-                      <div className="absolute inset-0 z-0">
-                        {getEmbedUrl(item.videoUrl) ? (
-                          <iframe
-                            src={getEmbedUrl(item.videoUrl, true)!}
-                            className="w-full h-full pointer-events-none scale-150"
-                            allow="autoplay"
-                          />
-                        ) : (
+                  {filteredItems.map((item) => (
+                    <motion.div
+                      key={item.id || item.title}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.4 }}
+                      className="group relative aspect-[4/5] rounded-3xl overflow-hidden cursor-pointer bg-neutral-900"
+                      onMouseEnter={() => item.type === 'videography' && setHoveredVideo(item.id || item.title)}
+                      onMouseLeave={() => setHoveredVideo(null)}
+                      onClick={() => {
+                        if (item.type === 'videography' && item.videoUrl) {
+                          setSelectedVideo(item.videoUrl);
+                        }
+                      }}
+                    >
+                      {item.type === 'photography' ? (
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover transition-all duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
+                        />
+                      ) : (
+                        <div className="absolute inset-0">
                           <video
                             src={item.videoUrl}
-                            autoPlay
+                            className={`w-full h-full object-cover transition-all duration-700 ${hoveredVideo === (item.id || item.title) ? 'scale-110 opacity-100' : 'opacity-50 group-hover:opacity-80'}`}
                             muted
                             loop
                             playsInline
-                            className="w-full h-full object-cover"
+                            autoPlay={hoveredVideo === (item.id || item.title)}
                           />
-                        )}
-                      </div>
-                    )}
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity z-10" />
+                          {!hoveredVideo && (
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                              <Play className="w-12 h-12 text-white/20 group-hover:text-white/40 transition-colors" />
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity z-10" />
                     
                     <div className="absolute inset-0 flex flex-col justify-end p-6 z-20">
                       <div className="flex items-center gap-2 mb-2">
