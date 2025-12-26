@@ -1,33 +1,36 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Play, Camera, ArrowLeft, Loader2, X } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-import { Button } from "@/components/ui/button";
-import { Navbar } from "@/components/Navbar";
 
-const staticPortfolioItems = [
-  {
-    type: "photography",
-    title: "Elegant Wedding",
-    category: "Photography",
-    image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000",
-  },
-  {
-    type: "videography",
-    title: "Cinematic Highlights",
-    category: "Videography",
-    image: "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=1000",
-  },
-  {
-    type: "photography",
-    title: "Candid Moments",
-    category: "Photography",
-    image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1000",
-  },
-];
+// Video component to handle play/pause on hover
+function VideoThumbnail({ src, isHovered }: { src: string; isHovered: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isHovered) {
+        videoRef.current.play().catch(() => {});
+      } else {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+      }
+    }
+  }, [isHovered]);
+
+  return (
+    <video
+      ref={videoRef}
+      src={src}
+      className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110 opacity-100' : 'opacity-50 group-hover:opacity-80'}`}
+      muted
+      loop
+      playsInline
+    />
+  );
+}
 
 export default function PortfolioPage() {
   const [filter, setFilter] = useState("all");
