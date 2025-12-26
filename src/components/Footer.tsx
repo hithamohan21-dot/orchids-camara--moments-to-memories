@@ -1,7 +1,7 @@
 "use client";
 
 import { Logo } from "./Logo";
-import { Instagram, Facebook, Youtube, Twitter } from "lucide-react";
+import { Instagram, Facebook, Twitter } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -18,7 +18,7 @@ export function Footer() {
               Premium photography and videography services for weddings and events. Based in Bengaluru, capturing moments to memories.
             </p>
             <div className="flex gap-4">
-              {[Instagram, Facebook, Youtube, Twitter].map((Icon, i) => (
+              {[Instagram, Facebook, Twitter].map((Icon, i) => (
                 <a
                   key={i}
                   href="#"
