@@ -66,10 +66,11 @@ const staticPortfolioItems = [
 
 export function Portfolio() {
   const [filter, setFilter] = useState("all");
-  const [items, setItems] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
-  const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
+    const [items, setItems] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchItems() {
