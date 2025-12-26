@@ -16,38 +16,26 @@ export function Hero() {
     }
   }, [isMuted]);
 
-  return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      <div className="absolute inset-0 z-0">
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted={isMuted}
-          playsInline
-          className="w-full h-full object-cover opacity-60 scale-105"
-        >
-          <source 
-            src="https://cdn.pixabay.com/video/2020/10/21/52835-471243171_tiny.mp4" 
-            type="video/mp4" 
-          />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black" />
-      </div>
+    return (
+      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div className="absolute inset-0 z-0">
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover opacity-60 scale-105"
+          >
+            <source 
+              src="https://cdn.pixabay.com/video/2020/10/21/52835-471243171_tiny.mp4" 
+              type="video/mp4" 
+            />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black" />
+        </div>
 
-      <button
-        onClick={() => setIsMuted(!isMuted)}
-        className="absolute bottom-10 right-10 z-20 p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full border border-white/20 transition-all group"
-        title={isMuted ? "Unmute" : "Mute"}
-      >
-        {isMuted ? (
-          <VolumeX className="w-6 h-6 text-white opacity-60 group-hover:opacity-100" />
-        ) : (
-          <Volume2 className="w-6 h-6 text-white" />
-        )}
-      </button>
-
-      <div className="container relative z-10 px-4 text-center">
+        <div className="container relative z-10 px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
