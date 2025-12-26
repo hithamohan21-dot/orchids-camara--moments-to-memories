@@ -16,7 +16,7 @@ export default function AdminLoginPage() {
   const [checking, setChecking] = useState(true);
   const router = useRouter();
 
-  const ADMIN_EMAIL = "admin@camara.com";
+  const ADMIN_EMAIL = "admin@gmail.com";
   const DEFAULT_PASSWORD = "camara2024";
 
   useEffect(() => {
