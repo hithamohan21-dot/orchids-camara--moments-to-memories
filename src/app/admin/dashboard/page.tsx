@@ -77,14 +77,14 @@ export default function AdminDashboardPage() {
             <Logo />
           </div>
           <h2 className="text-xl font-bold hidden lg:block">Dashboard</h2>
-          <div className="flex items-center gap-4">
-            <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium">{user.email}</p>
-              <p className="text-xs text-blue-400">Administrator</p>
-            </div>
-            <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center font-bold">
-              {user.email[0].toUpperCase()}
-            </div>
+            <div className="flex items-center gap-4">
+              <div className="text-right hidden sm:block">
+                <p className="text-sm font-medium">Administrator</p>
+                <p className="text-xs text-blue-400">Admin Panel</p>
+              </div>
+              <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center font-bold">
+                A
+              </div>
             <Button 
               variant="ghost" 
               size="icon"
