@@ -228,21 +228,23 @@ export function AdminPortfolioManager() {
                     <Video className="h-12 w-12 text-blue-500/50" />
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
-                <div className="absolute bottom-0 left-0 right-0 p-6 flex justify-between items-end">
-                  <div>
-                    <h4 className="text-white font-bold">{item.title}</h4>
-                    <p className="text-blue-400 text-xs uppercase tracking-widest">{item.type}</p>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
+                  <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                    <div className="flex justify-between items-end gap-4">
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-white font-bold truncate text-lg">{item.title}</h4>
+                        <p className="text-blue-400 text-xs uppercase tracking-widest font-semibold">{item.type}</p>
+                      </div>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        className="rounded-xl h-10 w-10 shrink-0 opacity-0 group-hover:opacity-100 transition-all hover:scale-110"
+                        onClick={() => handleDelete(item.id, item.url)}
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </Button>
+                    </div>
                   </div>
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    className="rounded-xl h-10 w-10 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => handleDelete(item.id, item.url)}
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </Button>
-                </div>
               </div>
             ))}
           </div>
