@@ -16,87 +16,65 @@ export default function AdminLoginPage() {
   const [checking, setChecking] = useState(true);
   const router = useRouter();
 
-  const ADMIN_EMAIL = "admin@camara.photography";
-  const DEFAULT_PASSWORD = "camara2024";
+    const ADMIN_EMAIL = "admin@gmail.com";
+    const DEFAULT_PASSWORD = "camara2024";
 
-  useEffect(() => {
-    async function checkUser() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        router.push("/admin/dashboard");
+    useEffect(() => {
+      async function checkUser() {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          router.push("/admin/dashboard");
+        }
+        setChecking(false);
       }
-      setChecking(false);
-    }
-    checkUser();
-  }, [router]);
+      checkUser();
+    }, [router]);
 
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      if (password !== DEFAULT_PASSWORD) {
-        throw new Error("Invalid admin password");
-      }
+    async function handleLogin(e: React.FormEvent) {
+      e.preventDefault();
+      setLoading(true);
+      try {
+        if (password !== DEFAULT_PASSWORD) {
+          throw new Error("Invalid admin password");
+        }
 
-      // Try to sign in
-      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-        email: ADMIN_EMAIL,
-        password: DEFAULT_PASSWORD,
-      });
+        // Try to sign in
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+          email: ADMIN_EMAIL,
+          password: DEFAULT_PASSWORD,
+        });
 
-      if (signInError) {
-        // If user not found, try to sign up
-        if (signInError.message.includes("Invalid login credentials") || signInError.message.includes("User not found")) {
-          const { error: signUpError } = await supabase.auth.signUp({
-            email: ADMIN_EMAIL,
-            password: DEFAULT_PASSWORD,
-            options: {
-              data: { role: 'admin' }
+        if (signInError) {
+          // If user not found, try to sign up
+          if (signInError.message.includes("Invalid login credentials") || signInError.message.includes("User not found")) {
+            const { error: signUpError } = await supabase.auth.signUp({
+              email: ADMIN_EMAIL,
+              password: DEFAULT_PASSWORD,
+              options: {
+                data: { role: 'admin' }
+              }
+            });
+            
+            if (signUpError) {
+              throw signUpError;
             }
-          });
-          
-          if (signUpError) {
-            // If even signup fails with invalid email, try one more generic one
-            if (signUpError.message.includes("invalid")) {
-              const fallbackEmail = `admin.${Math.random().toString(36).substring(7)}@example.com`;
-              const { error: fallbackError } = await supabase.auth.signUp({
-                email: fallbackEmail,
-                password: DEFAULT_PASSWORD,
-              });
-              if (fallbackError) throw fallbackError;
-              toast.success("Admin account initialized (fallback)!");
-              router.push("/admin/dashboard");
-              return;
-            }
-            throw signUpError;
+            
+            toast.success("Admin account initialized!");
+            router.push("/admin/dashboard");
+            return;
           }
           
-          toast.success("Admin account initialized!");
-          router.push("/admin/dashboard");
-          return;
+          throw signInError;
         }
-        
-        // Handle email not confirmed (very common in Supabase default settings)
-        if (signInError.message.includes("Email not confirmed")) {
-          toast.info("Accessing dashboard...");
-          // In some cases, we can still proceed if the session was partially created or we can just ignore it
-          // But usually we need it confirmed.
-          // Since this is a simple admin panel, we'll tell the user it's fine.
-          router.push("/admin/dashboard");
-          return;
-        }
-        
-        throw signInError;
-      }
 
-      toast.success("Welcome back!");
-      router.push("/admin/dashboard");
-    } catch (error: any) {
-      toast.error(error.message || "Invalid credentials");
-    } finally {
-      setLoading(false);
+        toast.success("Welcome back!");
+        router.push("/admin/dashboard");
+      } catch (error: any) {
+        toast.error(error.message || "Invalid credentials");
+      } finally {
+        setLoading(false);
+      }
     }
-  }
 
   if (checking) return null;
 
