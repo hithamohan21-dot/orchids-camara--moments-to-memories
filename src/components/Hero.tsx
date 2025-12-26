@@ -2,24 +2,15 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Star, Phone, ArrowRight, Volume2, VolumeX } from "lucide-react";
+import { Star, Phone, ArrowRight } from "lucide-react";
 import { Logo } from "./Logo";
-import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 
 export function Hero() {
-  const [isMuted, setIsMuted] = useState(true);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = isMuted;
-    }
-  }, [isMuted]);
-
     return (
       <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-black">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-black to-black" />
+        <div className="absolute inset-0 z-0 bg-black">
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/10 via-black to-black opacity-50" />
         </div>
 
         <div className="container relative z-10 px-4 text-center">
