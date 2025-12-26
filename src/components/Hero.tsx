@@ -17,22 +17,9 @@ export function Hero() {
   }, [isMuted]);
 
     return (
-      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-black">
         <div className="absolute inset-0 z-0">
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover opacity-60 scale-105"
-          >
-            <source 
-              src="https://cdn.pixabay.com/video/2020/10/21/52835-471243171_tiny.mp4" 
-              type="video/mp4" 
-            />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black" />
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 via-black to-black" />
         </div>
 
         <div className="container relative z-10 px-4 text-center">
