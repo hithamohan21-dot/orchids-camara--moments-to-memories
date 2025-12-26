@@ -63,14 +63,13 @@ export function Hero() {
               <Phone className="mr-2 h-5 w-5" />
               Call Now
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white/20 hover:bg-white/10 text-white px-8 h-14 rounded-full text-lg"
-              onClick={() => document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })}
-            >
-              View Portfolio
-            </Button>
+              <Button
+                size="lg"
+                className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-8 h-14 rounded-full text-lg transition-all"
+                onClick={() => document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })}
+              >
+                View Portfolio
+              </Button>
             <Button
               size="lg"
               variant="ghost"
