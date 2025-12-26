@@ -28,7 +28,6 @@ export function AdminPortfolioManager() {
       title: "",
       description: "",
       type: "image" as "image" | "video",
-      externalUrl: "",
     });
     const [file, setFile] = useState<File | null>(null);
     const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -60,20 +59,15 @@ export function AdminPortfolioManager() {
       return;
     }
 
-    if (newItem.type === 'video' && !newItem.externalUrl) {
-      toast.error("Please provide a YouTube/Instagram URL");
-      return;
-    }
-
-    if (newItem.type === 'image' && !file) {
-      toast.error("Please select an image file");
+    if (!file) {
+      toast.error(`Please select ${newItem.type === 'image' ? 'an image' : 'a video'} file`);
       return;
     }
 
     try {
       setUploading(true);
       
-      let finalUrl = newItem.externalUrl;
+      let finalUrl = "";
 
       if (file) {
         const fileExt = file.name.split('.').pop();
@@ -105,7 +99,7 @@ export function AdminPortfolioManager() {
       if (dbError) throw dbError;
 
       toast.success("Item added successfully");
-      setNewItem({ title: "", description: "", type: "image", externalUrl: "" });
+      setNewItem({ title: "", description: "", type: "image" });
       setFile(null);
       fetchItems();
     } catch (error: any) {
