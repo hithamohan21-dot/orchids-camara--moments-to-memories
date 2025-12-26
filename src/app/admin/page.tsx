@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Lock, Mail, Eye, EyeOff } from "lucide-react";
+import { Loader2, Lock, Eye, EyeOff } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Logo } from "@/components/Logo";
 
 export default function AdminLoginPage() {
   const [password, setPassword] = useState("");
@@ -14,7 +16,6 @@ export default function AdminLoginPage() {
   const [checking, setChecking] = useState(true);
   const router = useRouter();
 
-    const ADMIN_EMAIL = "admin@gmail.com";
     const DEFAULT_PASSWORD = "camara2024";
 
     useEffect(() => {
@@ -36,9 +37,7 @@ export default function AdminLoginPage() {
           throw new Error("Invalid admin password");
         }
 
-        // Use a simple local session for admin access to bypass Supabase Auth issues
         localStorage.setItem("admin_session", "active");
-        
         toast.success("Welcome back!");
         router.push("/admin/dashboard");
       } catch (error: any) {
@@ -57,8 +56,8 @@ export default function AdminLoginPage() {
       </div>
       
       <div className="w-full max-w-md bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl">
-        <h1 className="text-3xl font-bold text-white mb-2">Admin Access</h1>
-        <p className="text-blue-100/40 mb-8">Enter the admin password to access the dashboard</p>
+        <h1 className="text-3xl font-bold text-white mb-2 text-center">Admin Access</h1>
+        <p className="text-blue-100/40 mb-8 text-center">Enter the admin password to access the dashboard</p>
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-2">
@@ -71,7 +70,7 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="bg-black/50 border-white/10 pl-11 pr-11 text-white h-12 rounded-xl focus:ring-blue-500/50"
+                className="bg-black/50 border-white/10 pl-11 pr-11 text-white h-12 rounded-xl focus:ring-blue-500/50 w-full"
               />
               <button
                 type="button"
@@ -80,26 +79,6 @@ export default function AdminLoginPage() {
               >
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
-            </div>
-          </div>
-      
-      <div className="w-full max-w-md bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl">
-        <h1 className="text-3xl font-bold text-white mb-2">Admin Access</h1>
-        <p className="text-blue-100/40 mb-8">Enter the admin password to access the dashboard</p>
-
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div className="space-y-2">
-            <Label className="text-blue-100/60">Admin Password</Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-blue-100/20" />
-              <Input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="bg-black/50 border-white/10 pl-11 text-white h-12 rounded-xl focus:ring-blue-500/50"
-              />
             </div>
           </div>
 
