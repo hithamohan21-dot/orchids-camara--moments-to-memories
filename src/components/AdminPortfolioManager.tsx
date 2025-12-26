@@ -163,7 +163,10 @@ export function AdminPortfolioManager() {
                 />
                 <button
                   type="button"
-                  onClick={() => setNewItem({ ...newItem, type: 'image', externalUrl: "" })}
+                  onClick={() => {
+                    setNewItem({ ...newItem, type: 'image' });
+                    setFile(null);
+                  }}
                   className={cn(
                     "flex-1 flex items-center justify-center rounded-lg text-sm font-medium z-10 transition-colors",
                     newItem.type === 'image' ? "text-white" : "text-white/40 hover:text-white"
@@ -173,7 +176,10 @@ export function AdminPortfolioManager() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setNewItem({ ...newItem, type: 'video' })}
+                  onClick={() => {
+                    setNewItem({ ...newItem, type: 'video' });
+                    setFile(null);
+                  }}
                   className={cn(
                     "flex-1 flex items-center justify-center rounded-lg text-sm font-medium z-10 transition-colors",
                     newItem.type === 'video' ? "text-white" : "text-white/40 hover:text-white"
@@ -183,65 +189,39 @@ export function AdminPortfolioManager() {
                 </button>
               </div>
             </div>
-            {newItem.type === 'video' && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                  <Label className="text-blue-100/60">Video URL (YouTube/Instagram)</Label>
-                  <Input
-                    value={newItem.externalUrl}
-                    onChange={(e) => setNewItem({ ...newItem, externalUrl: e.target.value, description: "External Video" })}
-                    placeholder="https://www.youtube.com/watch?v=..."
-                    className="bg-black/50 border-white/10 text-white mt-2"
-                  />
-              </motion.div>
-            )}
           </div>
           <div className="space-y-4">
-            {newItem.type === 'image' ? (
-              <>
-                <Label className="text-blue-100/60">Upload Photo</Label>
-                <div 
-                  className="border-2 border-dashed border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-500/50 transition-colors cursor-pointer bg-black/20"
-                  onClick={() => document.getElementById('file-upload')?.click()}
-                >
-                  <Input
-                    id="file-upload"
-                    type="file"
-                    className="hidden"
-                    accept="image/*"
-                    onChange={(e) => setFile(e.target.files?.[0] || null)}
-                  />
-                  {file ? (
-                    <div className="text-center">
-                      <p className="text-white font-medium">{file.name}</p>
-                      <p className="text-blue-400 text-sm">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
-                    </div>
-                  ) : (
-                    <>
-                      <Plus className="h-10 w-10 text-blue-500/50" />
-                      <p className="text-blue-100/40 text-sm">Click to select photo</p>
-                    </>
-                  )}
+            <Label className="text-blue-100/60">
+              {newItem.type === 'image' ? 'Upload Photo' : 'Upload Video'}
+            </Label>
+            <div 
+              className="border-2 border-dashed border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-500/50 transition-colors cursor-pointer bg-black/20"
+              onClick={() => document.getElementById('file-upload')?.click()}
+            >
+              <Input
+                id="file-upload"
+                type="file"
+                className="hidden"
+                accept={newItem.type === 'image' ? "image/*" : "video/*"}
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+              />
+              {file ? (
+                <div className="text-center">
+                  <p className="text-white font-medium">{file.name}</p>
+                  <p className="text-blue-400 text-sm">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
                 </div>
-              </>
-            ) : (
-              <div className="h-full flex flex-col justify-end pb-0.5">
-                <div className="bg-blue-600/5 border border-blue-600/20 rounded-2xl p-6 mb-4">
-                  <p className="text-blue-400 text-sm flex items-center gap-2">
-                    <AlertCircle className="h-4 w-4" />
-                    Videos use external links
+              ) : (
+                <>
+                  <Plus className="h-10 w-10 text-blue-500/50" />
+                  <p className="text-blue-100/40 text-sm">
+                    Click to select {newItem.type === 'image' ? 'photo' : 'video'}
                   </p>
-                  <p className="text-blue-100/20 text-xs mt-1">
-                    Direct uploads are disabled to ensure best performance via YouTube/Instagram.
-                  </p>
-                </div>
-              </div>
-            )}
+                </>
+              )}
+            </div>
             <Button
               className="w-full bg-blue-600 hover:bg-blue-700 h-12 text-lg"
-              disabled={uploading || (!file && !newItem.externalUrl) || !newItem.title}
+              disabled={uploading || !file || !newItem.title}
               onClick={handleUpload}
             >
               {uploading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Save to Portfolio"}
@@ -265,19 +245,24 @@ export function AdminPortfolioManager() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {items.map((item) => (
                 <div key={item.id} className="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-neutral-900 border border-white/10">
-                  {item.type === 'image' || (!item.url.includes('youtube') && !item.url.includes('instagram')) ? (
+                  {item.type === 'image' ? (
                     <Image
-                      src={item.url.includes('youtube') ? `https://img.youtube.com/vi/${item.url.includes('v=') ? item.url.split('v=')[1].split('&')[0] : item.url.split('/').pop()}/maxresdefault.jpg` : item.url}
+                      src={item.url}
                       alt={item.title}
                       fill
                       className="object-cover opacity-60 group-hover:opacity-100 transition-opacity"
                     />
                   ) : (
-                    <div className="absolute inset-0 flex items-center justify-center bg-blue-900/20">
-                      <Video className="h-12 w-12 text-blue-500/50" />
-                      {item.url.includes('youtube') || item.url.includes('instagram') ? (
-                        <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-tighter text-blue-400/60 font-bold">External Link</span>
-                      ) : null}
+                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/0 transition-colors">
+                      <video 
+                        src={item.url}
+                        className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+                        muted
+                        playsInline
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity">
+                        <Video className="h-12 w-12 text-white/50" />
+                      </div>
                     </div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
