@@ -2,23 +2,50 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Star, Phone, ArrowRight } from "lucide-react";
-import Image from "next/image";
+import { Star, Phone, ArrowRight, Volume2, VolumeX } from "lucide-react";
 import { Logo } from "./Logo";
+import { useState, useRef, useEffect } from "react";
 
 export function Hero() {
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       <div className="absolute inset-0 z-0">
-        <Image
-          src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2400"
-          alt="Wedding Photography"
-          fill
-          className="object-cover opacity-60 scale-105"
-          priority
-        />
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover opacity-60 scale-105"
+        >
+          <source 
+            src="https://player.vimeo.com/external/370331493.hd.mp4?s=38d51357059489d8924b22c813735165842813c4&profile_id=174" 
+            type="video/mp4" 
+          />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black" />
       </div>
+
+      <button
+        onClick={() => setIsMuted(!isMuted)}
+        className="absolute bottom-10 right-10 z-20 p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full border border-white/20 transition-all group"
+        title={isMuted ? "Unmute" : "Mute"}
+      >
+        {isMuted ? (
+          <VolumeX className="w-6 h-6 text-white opacity-60 group-hover:opacity-100" />
+        ) : (
+          <Volume2 className="w-6 h-6 text-white" />
+        )}
+      </button>
 
       <div className="container relative z-10 px-4 text-center">
         <motion.div
