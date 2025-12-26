@@ -1,10 +1,23 @@
 "use client";
 
 import { Logo } from "./Logo";
-import { Instagram, Facebook, Twitter } from "lucide-react";
+import { Instagram, Facebook } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+
+  const socialLinks = [
+    {
+      icon: Instagram,
+      href: "https://www.instagram.com/camara.insta?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+      label: "Instagram"
+    },
+    {
+      icon: Facebook,
+      href: "https://www.facebook.com/camarazone/",
+      label: "Facebook"
+    }
+  ];
 
   return (
     <footer className="bg-black border-t border-white/5 pt-24 pb-12">
@@ -18,13 +31,16 @@ export function Footer() {
               Premium photography and videography services for weddings and events. Based in Bengaluru, capturing moments to memories.
             </p>
             <div className="flex gap-4">
-              {[Instagram, Facebook, Twitter].map((Icon, i) => (
+              {socialLinks.map((social, i) => (
                 <a
                   key={i}
-                  href="#"
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
                   className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-blue-100/40 hover:text-blue-400 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300"
                 >
-                  <Icon className="w-5 h-5" />
+                  <social.icon className="w-5 h-5" />
                 </a>
               ))}
             </div>
