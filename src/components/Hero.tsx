@@ -8,15 +8,15 @@ import { Logo } from "./Logo";
 export function Hero() {
     return (
         <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-black">
-          <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-black/60 z-10" />
-            <img 
-              src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2070&auto=format&fit=crop" 
-              alt="Photography Background" 
-              className="w-full h-full object-cover scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black z-10" />
-          </div>
+            <div className="absolute inset-0 z-0">
+              <div className="absolute inset-0 bg-black/70 z-10" />
+              <img 
+                src="https://images.unsplash.com/photo-1452784444945-3f422708fe5e?q=80&w=2072&auto=format&fit=crop" 
+                alt="Photography Background" 
+                className="w-full h-full object-cover scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black z-10" />
+            </div>
 
           <div className="container relative z-20 px-4 text-center">
           <motion.div
