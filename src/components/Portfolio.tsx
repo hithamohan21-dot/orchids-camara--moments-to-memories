@@ -32,6 +32,7 @@ export function Portfolio() {
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchItems() {
@@ -69,21 +70,8 @@ export function Portfolio() {
     ? items 
     : items.filter(item => item.type === filter);
 
-  const getEmbedUrl = (url: string) => {
-    if (url.includes('youtube.com') || url.includes('youtu.be')) {
-      const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
-      return `https://www.youtube.com/embed/${id}?autoplay=1`;
-    }
-    if (url.includes('vimeo.com')) {
-      const id = url.split('/').pop();
-      return `https://player.vimeo.com/video/${id}?autoplay=1`;
-    }
-    return null;
-  };
-
-  const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
-
   const getEmbedUrl = (url: string, autoplay = true) => {
+    if (!url) return null;
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
       const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
       return `https://www.youtube.com/embed/${id}${autoplay ? '?autoplay=1&mute=1' : ''}`;
@@ -136,7 +124,7 @@ export function Portfolio() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence mode="popLayout">
-              {filteredItems.map((item, index) => (
+              {filteredItems.map((item) => (
                 <motion.div
                   key={item.id || item.title}
                   layout
