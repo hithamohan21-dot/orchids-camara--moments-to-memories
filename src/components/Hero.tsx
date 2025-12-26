@@ -31,21 +31,21 @@ export function Hero() {
             <Logo />
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="flex items-center gap-2 mb-4 bg-blue-500/10 border border-blue-500/20 px-4 py-1.5 rounded-full"
-          >
-            <div className="flex gap-0.5">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
-              ))}
-            </div>
-            <span className="text-sm font-medium text-blue-100">
-              5.0 (61 Reviews)
-            </span>
-          </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="flex items-center gap-2 mb-4 bg-blue-500/10 border border-blue-500/20 px-4 py-1.5 rounded-full"
+            >
+              <div className="flex gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
+                ))}
+              </div>
+              <span className="text-sm font-medium text-blue-100">
+                5.0 Rating
+              </span>
+            </motion.div>
 
           <h1 className="text-5xl md:text-8xl font-bold tracking-tight mb-4 text-white">
             CAMARA
