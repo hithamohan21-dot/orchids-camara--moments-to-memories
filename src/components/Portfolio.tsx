@@ -7,17 +7,26 @@ import { Play, Camera, ExternalLink, Loader2, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Button } from "./ui/button";
 
-// Video component to handle play/pause on hover
+// Video component to handle play/pause on hover with sound
 function VideoThumbnail({ src, isHovered }: { src: string; isHovered: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (videoRef.current) {
       if (isHovered) {
-        videoRef.current.play().catch(() => {});
+        // Unmute and play on hover
+        videoRef.current.muted = false;
+        videoRef.current.play().catch(() => {
+          // Fallback to muted play if browser blocks audio
+          if (videoRef.current) {
+            videoRef.current.muted = true;
+            videoRef.current.play().catch(() => {});
+          }
+        });
       } else {
         videoRef.current.pause();
         videoRef.current.currentTime = 0;
+        videoRef.current.muted = true;
       }
     }
   }, [isHovered]);
@@ -27,9 +36,9 @@ function VideoThumbnail({ src, isHovered }: { src: string; isHovered: boolean })
       ref={videoRef}
       src={src}
       className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110 opacity-100' : 'opacity-50 group-hover:opacity-80'}`}
-      muted
       loop
       playsInline
+      muted // Start muted to satisfy autoplay policies
     />
   );
 }
