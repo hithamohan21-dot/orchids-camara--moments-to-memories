@@ -80,7 +80,7 @@ export function About() {
             <div className="absolute bottom-8 left-8 right-8">
               <div className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl">
                 <div className="text-3xl font-bold text-white mb-1">5.0 ⭐</div>
-                <div className="text-blue-100/60 text-sm tracking-wide uppercase">Google Rating (61 Reviews)</div>
+                <div className="text-blue-100/60 text-sm tracking-wide uppercase">Google Rating</div>
               </div>
             </div>
           </motion.div>
