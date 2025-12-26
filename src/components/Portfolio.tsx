@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Play, Camera, ExternalLink, Loader2 } from "lucide-react";
+import { Play, Camera, ExternalLink, Loader2, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 const staticPortfolioItems = [
@@ -31,6 +31,7 @@ export function Portfolio() {
   const [filter, setFilter] = useState("all");
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchItems() {
@@ -48,6 +49,7 @@ export function Portfolio() {
             title: item.title,
             category: item.type === 'image' ? 'Photography' : 'Videography',
             image: item.url,
+            videoUrl: item.type === 'video' ? item.url : null,
             id: item.id
           })));
         } else {
@@ -70,6 +72,7 @@ export function Portfolio() {
   return (
     <section id="portfolio" className="py-24 bg-black">
       <div className="container px-4">
+        {/* ... existing header code ... */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -117,6 +120,11 @@ export function Portfolio() {
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.4 }}
                   className="group relative aspect-[4/5] rounded-3xl overflow-hidden cursor-pointer bg-neutral-900"
+                  onClick={() => {
+                    if (item.type === 'videography' && item.videoUrl) {
+                      setSelectedVideo(item.videoUrl);
+                    }
+                  }}
                 >
                   <Image
                     src={item.image}
@@ -135,7 +143,7 @@ export function Portfolio() {
                     </div>
                     <h4 className="text-2xl font-bold text-white mb-2">{item.title}</h4>
                     <div className="flex items-center text-blue-100/60 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                      View Work <ExternalLink className="ml-2 w-4 h-4" />
+                      {item.type === 'videography' ? 'Play Video' : 'View Work'} <ExternalLink className="ml-2 w-4 h-4" />
                     </div>
                   </div>
                 </motion.div>
@@ -143,6 +151,38 @@ export function Portfolio() {
             </AnimatePresence>
           </div>
         )}
+
+        {/* Video Modal */}
+        <AnimatePresence>
+          {selectedVideo && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-12"
+            >
+              <button 
+                onClick={() => setSelectedVideo(null)}
+                className="absolute top-6 right-6 text-white hover:text-blue-400 transition-colors z-[110]"
+              >
+                <X className="w-8 h-8" />
+              </button>
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl"
+              >
+                <video
+                  src={selectedVideo}
+                  controls
+                  autoPlay
+                  className="w-full h-full"
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
