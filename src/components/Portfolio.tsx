@@ -201,10 +201,10 @@ export function Portfolio() {
                       </span>
                       <span className="text-xs font-bold text-blue-400 uppercase tracking-[0.2em]">{item.category}</span>
                     </div>
-                    <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-xs font-bold text-white/50 uppercase tracking-widest">
-                      {item.type === 'videography' ? 'Watch Now' : 'View Project'}
-                    </span>
-                  </div>
+                      <span className="opacity-0 group-hover:opacity-100 transition-all duration-500 text-[10px] font-bold text-white bg-blue-600/80 px-3 py-1 rounded-full backdrop-blur-sm uppercase tracking-widest border border-white/20">
+                        {item.type === 'videography' ? 'Watch Now' : 'View Project'}
+                      </span>
+                    </div>
                   <h4 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-500 transition-colors duration-300">{item.title}</h4>
                   <div className="w-0 group-hover:w-full h-0.5 bg-blue-500 transition-all duration-500" />
                 </div>
