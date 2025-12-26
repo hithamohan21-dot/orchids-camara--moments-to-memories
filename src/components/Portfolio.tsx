@@ -69,10 +69,21 @@ export function Portfolio() {
     ? items 
     : items.filter(item => item.type === filter);
 
+  const getEmbedUrl = (url: string) => {
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
+      return `https://www.youtube.com/embed/${id}?autoplay=1`;
+    }
+    if (url.includes('vimeo.com')) {
+      const id = url.split('/').pop();
+      return `https://player.vimeo.com/video/${id}?autoplay=1`;
+    }
+    return null;
+  };
+
   return (
     <section id="portfolio" className="py-24 bg-black">
       <div className="container px-4">
-        {/* ... existing header code ... */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -173,12 +184,21 @@ export function Portfolio() {
                 exit={{ scale: 0.9, opacity: 0 }}
                 className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl"
               >
-                <video
-                  src={selectedVideo}
-                  controls
-                  autoPlay
-                  className="w-full h-full"
-                />
+                {getEmbedUrl(selectedVideo) ? (
+                  <iframe
+                    src={getEmbedUrl(selectedVideo)!}
+                    className="w-full h-full"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <video
+                    src={selectedVideo}
+                    controls
+                    autoPlay
+                    className="w-full h-full"
+                  />
+                )}
               </motion.div>
             </motion.div>
           )}
