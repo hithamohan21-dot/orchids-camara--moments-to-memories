@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Star, Phone, ArrowRight } from "lucide-react";
 import { Logo } from "./Logo";
-import { motion } from "framer-motion";
 
 export function Hero() {
     return (
