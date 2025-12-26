@@ -61,7 +61,7 @@ export function AdminPortfolioManager() {
     }
 
     if (newItem.type === 'video' && !newItem.externalUrl && !file) {
-      toast.error("Please provide a video file or a YouTube/Vimeo URL");
+      toast.error("Please provide a video file or a YouTube/Instagram URL");
       return;
     }
 
