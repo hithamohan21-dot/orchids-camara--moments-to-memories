@@ -174,6 +174,8 @@ export default function PortfolioPage() {
                         onClick={() => {
                           if (item.type === 'videography' && item.videoUrl) {
                             setSelectedVideo(item.videoUrl);
+                          } else if (item.type === 'photography') {
+                            setSelectedImage(item.image);
                           }
                         }}
                       >
