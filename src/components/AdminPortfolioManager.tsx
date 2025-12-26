@@ -205,32 +205,46 @@ export function AdminPortfolioManager() {
             )}
           </div>
           <div className="space-y-4">
-            <Label className="text-blue-100/60">Upload {newItem.type === 'image' ? 'Photo' : 'Video File'}</Label>
-            <div 
-              className={`border-2 border-dashed border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-500/50 transition-colors cursor-pointer bg-black/20 ${newItem.externalUrl ? 'opacity-50 pointer-events-none' : ''}`}
-              onClick={() => !newItem.externalUrl && document.getElementById('file-upload')?.click()}
-            >
-              <Input
-                id="file-upload"
-                type="file"
-                className="hidden"
-                accept={newItem.type === 'image' ? "image/*" : "video/*"}
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-              />
-              {file ? (
-                <div className="text-center">
-                  <p className="text-white font-medium">{file.name}</p>
-                  <p className="text-blue-400 text-sm">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
+            {newItem.type === 'image' ? (
+              <>
+                <Label className="text-blue-100/60">Upload Photo</Label>
+                <div 
+                  className="border-2 border-dashed border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-500/50 transition-colors cursor-pointer bg-black/20"
+                  onClick={() => document.getElementById('file-upload')?.click()}
+                >
+                  <Input
+                    id="file-upload"
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => setFile(e.target.files?.[0] || null)}
+                  />
+                  {file ? (
+                    <div className="text-center">
+                      <p className="text-white font-medium">{file.name}</p>
+                      <p className="text-blue-400 text-sm">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
+                    </div>
+                  ) : (
+                    <>
+                      <Plus className="h-10 w-10 text-blue-500/50" />
+                      <p className="text-blue-100/40 text-sm">Click to select photo</p>
+                    </>
+                  )}
                 </div>
-              ) : (
-                <>
-                  <Plus className="h-10 w-10 text-blue-500/50" />
-                  <p className="text-blue-100/40 text-sm">
-                    {newItem.externalUrl ? 'Video URL provided' : `Click to select ${newItem.type}`}
+              </>
+            ) : (
+              <div className="h-full flex flex-col justify-end pb-0.5">
+                <div className="bg-blue-600/5 border border-blue-600/20 rounded-2xl p-6 mb-4">
+                  <p className="text-blue-400 text-sm flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4" />
+                    Videos use external links
                   </p>
-                </>
-              )}
-            </div>
+                  <p className="text-blue-100/20 text-xs mt-1">
+                    Direct uploads are disabled to ensure best performance via YouTube/Instagram.
+                  </p>
+                </div>
+              </div>
+            )}
             <Button
               className="w-full bg-blue-600 hover:bg-blue-700 h-12 text-lg"
               disabled={uploading || (!file && !newItem.externalUrl) || !newItem.title}
