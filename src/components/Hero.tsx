@@ -7,34 +7,44 @@ import { Logo } from "./Logo";
 
 export function Hero() {
     return (
-      <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-black">
-        <div className="absolute inset-0 z-0 bg-black">
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/10 via-black to-black opacity-50" />
-        </div>
-
-        <div className="container relative z-10 px-4 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex flex-col items-center"
-        >
-          <div className="mb-6 opacity-80 scale-75 md:scale-100">
-            <Logo />
+        <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-black">
+          <div className="absolute inset-0 z-0">
+            <div className="absolute inset-0 bg-black/60 z-10" />
+            <img 
+              src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2070&auto=format&fit=crop" 
+              alt="Photography Background" 
+              className="w-full h-full object-cover scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black z-10" />
           </div>
 
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-                className="flex items-center gap-2 mb-4 bg-blue-500/10 border border-blue-500/20 px-4 py-1.5 rounded-full"
-              >
-                <div className="flex gap-0.5">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
-                  ))}
-                </div>
-              </motion.div>
+          <div className="container relative z-20 px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col items-center"
+          >
+            <div className="mb-6 opacity-80 scale-75 md:scale-100">
+              <Logo />
+            </div>
+
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2, duration: 0.5 }}
+                  className="flex flex-col items-center gap-2 mb-8"
+                >
+                  <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-full backdrop-blur-md">
+                    <span className="text-yellow-500 font-bold text-lg">5.0</span>
+                    <div className="flex gap-0.5">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
+                      ))}
+                    </div>
+                  </div>
+                  <span className="text-xs text-white/40 tracking-[0.2em] uppercase font-medium">Google Ratings</span>
+                </motion.div>
 
           <h1 className="text-5xl md:text-8xl font-bold tracking-tight mb-4 text-white">
             CAMARA
