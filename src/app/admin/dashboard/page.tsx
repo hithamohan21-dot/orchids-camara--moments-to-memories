@@ -14,24 +14,25 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    async function getUser() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        router.push("/admin");
-      } else {
-        setUser(user);
+    useEffect(() => {
+      function checkAuth() {
+        const session = localStorage.getItem("admin_session");
+        if (!session) {
+          router.push("/admin");
+        } else {
+          setUser({ email: "admin@gmail.com", role: "admin" });
+        }
+        setLoading(false);
       }
-      setLoading(false);
-    }
-    getUser();
-  }, [router]);
+      checkAuth();
+    }, [router]);
 
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    toast.success("Logged out successfully");
-    router.push("/admin");
-  }
+    async function handleLogout() {
+      localStorage.removeItem("admin_session");
+      toast.success("Logged out successfully");
+      router.push("/admin");
+    }
+
 
   if (loading) return null;
   if (!user) return null;
