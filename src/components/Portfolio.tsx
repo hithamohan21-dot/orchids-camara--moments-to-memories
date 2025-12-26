@@ -197,48 +197,6 @@ export function Portfolio() {
             <ExternalLink className="ml-2 h-5 w-5" />
           </Button>
         </div>
-
-        {/* Video Modal */}
-        <AnimatePresence>
-          {selectedVideo && (
-            <motion.div
-              key="modal"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-12"
-            >
-              <button 
-                onClick={() => setSelectedVideo(null)}
-                className="absolute top-6 right-6 text-white hover:text-blue-400 transition-colors z-[110]"
-              >
-                <X className="w-8 h-8" />
-              </button>
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl"
-              >
-                {getEmbedUrl(selectedVideo) ? (
-                  <iframe
-                    src={getEmbedUrl(selectedVideo)!}
-                    className="w-full h-full"
-                    allow="autoplay; fullscreen; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : (
-                  <video
-                    src={selectedVideo}
-                    controls
-                    autoPlay
-                    className="w-full h-full"
-                  />
-                )}
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
     </section>
   );
