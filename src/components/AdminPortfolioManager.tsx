@@ -157,23 +157,36 @@ export function AdminPortfolioManager() {
             </div>
             <div>
               <Label className="text-blue-100/60">Type</Label>
-              <div className="flex gap-4 mt-2">
-                <Button
+              <div className="flex p-1 bg-black/50 border border-white/10 rounded-xl mt-2 w-full max-w-xs relative overflow-hidden h-11">
+                <motion.div
+                  className="absolute inset-y-1 bg-blue-600 rounded-lg z-0"
+                  initial={false}
+                  animate={{
+                    left: newItem.type === 'image' ? '4px' : 'calc(50% + 2px)',
+                    width: 'calc(50% - 6px)',
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+                <button
                   type="button"
-                  variant={newItem.type === 'image' ? 'default' : 'outline'}
                   onClick={() => setNewItem({ ...newItem, type: 'image', externalUrl: "" })}
-                  className="flex-1"
+                  className={cn(
+                    "flex-1 flex items-center justify-center rounded-lg text-sm font-medium z-10 transition-colors",
+                    newItem.type === 'image' ? "text-white" : "text-white/40 hover:text-white"
+                  )}
                 >
                   <ImageIcon className="mr-2 h-4 w-4" /> Photo
-                </Button>
-                <Button
+                </button>
+                <button
                   type="button"
-                  variant={newItem.type === 'video' ? 'default' : 'outline'}
                   onClick={() => setNewItem({ ...newItem, type: 'video' })}
-                  className="flex-1"
+                  className={cn(
+                    "flex-1 flex items-center justify-center rounded-lg text-sm font-medium z-10 transition-colors",
+                    newItem.type === 'video' ? "text-white" : "text-white/40 hover:text-white"
+                  )}
                 >
                   <Video className="mr-2 h-4 w-4" /> Video
-                </Button>
+                </button>
               </div>
             </div>
             {newItem.type === 'video' && (
