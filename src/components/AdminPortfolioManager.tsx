@@ -194,13 +194,13 @@ export function AdminPortfolioManager() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <Label className="text-blue-100/60">Video URL (YouTube/Vimeo)</Label>
-                <Input
-                  value={newItem.externalUrl}
-                  onChange={(e) => setNewItem({ ...newItem, externalUrl: e.target.value, description: "External Video" })}
-                  placeholder="https://www.youtube.com/watch?v=..."
-                  className="bg-black/50 border-white/10 text-white mt-2"
-                />
+                  <Label className="text-blue-100/60">Video URL (YouTube/Instagram)</Label>
+                  <Input
+                    value={newItem.externalUrl}
+                    onChange={(e) => setNewItem({ ...newItem, externalUrl: e.target.value, description: "External Video" })}
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    className="bg-black/50 border-white/10 text-white mt-2"
+                  />
                 <p className="text-xs text-blue-100/20 mt-2">Or upload a video file below</p>
               </motion.div>
             )}
