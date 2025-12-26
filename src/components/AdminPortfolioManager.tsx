@@ -257,22 +257,22 @@ export function AdminPortfolioManager() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {items.map((item) => (
-              <div key={item.id} className="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-neutral-900 border border-white/10">
-                {item.type === 'image' || (!item.url.includes('youtube') && !item.url.includes('vimeo')) ? (
-                  <Image
-                    src={item.url.includes('youtube') ? `https://img.youtube.com/vi/${item.url.includes('v=') ? item.url.split('v=')[1].split('&')[0] : item.url.split('/').pop()}/maxresdefault.jpg` : item.url}
-                    alt={item.title}
-                    fill
-                    className="object-cover opacity-60 group-hover:opacity-100 transition-opacity"
-                  />
-                ) : (
-                  <div className="absolute inset-0 flex items-center justify-center bg-blue-900/20">
-                    <Video className="h-12 w-12 text-blue-500/50" />
-                    {item.url.includes('youtube') || item.url.includes('vimeo') ? (
-                      <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-tighter text-blue-400/60 font-bold">External Link</span>
-                    ) : null}
-                  </div>
-                )}
+                <div key={item.id} className="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-neutral-900 border border-white/10">
+                  {item.type === 'image' || (!item.url.includes('youtube') && !item.url.includes('instagram')) ? (
+                    <Image
+                      src={item.url.includes('youtube') ? `https://img.youtube.com/vi/${item.url.includes('v=') ? item.url.split('v=')[1].split('&')[0] : item.url.split('/').pop()}/maxresdefault.jpg` : item.url}
+                      alt={item.title}
+                      fill
+                      className="object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center bg-blue-900/20">
+                      <Video className="h-12 w-12 text-blue-500/50" />
+                      {item.url.includes('youtube') || item.url.includes('instagram') ? (
+                        <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-tighter text-blue-400/60 font-bold">External Link</span>
+                      ) : null}
+                    </div>
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
                   <div className="absolute inset-0 p-6 flex flex-col justify-end">
                     <div className="flex justify-between items-end gap-4">
