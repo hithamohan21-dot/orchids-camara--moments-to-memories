@@ -1,8 +1,10 @@
 "use client";
 
 import { MessageCircle } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export function WhatsAppButton() {
+  const pathname = usePathname();
   const phoneNumber = "919845374999"; // Based on the call button in Hero
   const message = "Hi Camara Crew, I'm interested in your services!";
   
@@ -10,6 +12,8 @@ export function WhatsAppButton() {
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
   };
+
+  if (pathname?.startsWith("/admin")) return null;
 
   return (
     <button
