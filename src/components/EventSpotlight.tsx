@@ -14,12 +14,12 @@ export function EventSpotlight() {
           transition={{ duration: 1, ease: "easeOut" }}
           className="relative aspect-[16/9] md:aspect-[21/9] rounded-[3rem] overflow-hidden group shadow-2xl"
         >
-          <Image
-            src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070"
-            alt="Beautiful Event"
-            fill
-            className="object-cover transition-transform duration-[2s] group-hover:scale-105"
-          />
+            <Image
+              src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=2070"
+              alt="Professional Event Spotlight"
+              fill
+              className="object-cover transition-transform duration-[2s] group-hover:scale-105"
+            />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60" />
           <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-16">
             <motion.div
