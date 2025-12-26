@@ -1,11 +1,38 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Play, Camera, ExternalLink, Loader2, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Button } from "./ui/button";
+
+// Video component to handle play/pause on hover
+function VideoThumbnail({ src, isHovered }: { src: string; isHovered: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isHovered) {
+        videoRef.current.play().catch(() => {});
+      } else {
+        videoRef.current.pause();
+        videoRef.current.currentTime = 0;
+      }
+    }
+  }, [isHovered]);
+
+  return (
+    <video
+      ref={videoRef}
+      src={src}
+      className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110 opacity-100' : 'opacity-50 group-hover:opacity-80'}`}
+      muted
+      loop
+      playsInline
+    />
+  );
+}
 
 const staticPortfolioItems = [
   {
@@ -70,20 +97,6 @@ export function Portfolio() {
   const filteredItems = filter === "all" 
     ? items 
     : items.filter(item => item.type === filter);
-
-    const getEmbedUrl = (url: string, autoplay = true) => {
-      if (!url) return null;
-      if (url.includes('youtube.com') || url.includes('youtu.be')) {
-        const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
-        return `https://www.youtube.com/embed/${id}${autoplay ? '?autoplay=1&mute=1' : ''}`;
-      }
-      if (url.includes('instagram.com')) {
-        const parts = url.split('/').filter(Boolean);
-        const id = parts[parts.length - 1];
-        return `https://www.instagram.com/reel/${id}/embed`;
-      }
-      return null;
-    };
 
   return (
     <section id="portfolio" className="py-24 bg-black overflow-hidden">
@@ -152,15 +165,11 @@ export function Portfolio() {
                       />
                     ) : (
                       <div className="absolute inset-0">
-                        <video
-                          src={item.videoUrl}
-                          className={`w-full h-full object-cover transition-all duration-700 ${hoveredVideo === (item.id || item.title) ? 'scale-110 opacity-100' : 'opacity-50 group-hover:opacity-80'}`}
-                          muted
-                          loop
-                          playsInline
-                          autoPlay={hoveredVideo === (item.id || item.title)}
+                        <VideoThumbnail 
+                          src={item.videoUrl} 
+                          isHovered={hoveredVideo === (item.id || item.title)} 
                         />
-                        {!hoveredVideo && (
+                        {hoveredVideo !== (item.id || item.title) && (
                           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                             <Play className="w-12 h-12 text-white/20 group-hover:text-white/40 transition-colors" />
                           </div>
@@ -196,6 +205,38 @@ export function Portfolio() {
           </Button>
         </div>
       </div>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {selectedVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-12"
+          >
+            <button 
+              onClick={() => setSelectedVideo(null)}
+              className="absolute top-6 right-6 text-white hover:text-blue-400 transition-colors z-[110]"
+            >
+              <X className="w-8 h-8" />
+            </button>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl"
+            >
+              <video
+                src={selectedVideo}
+                controls
+                autoPlay
+                className="w-full h-full"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
