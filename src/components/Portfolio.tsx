@@ -81,10 +81,24 @@ export function Portfolio() {
     return null;
   };
 
+  const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
+
+  const getEmbedUrl = (url: string, autoplay = true) => {
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
+      return `https://www.youtube.com/embed/${id}${autoplay ? '?autoplay=1&mute=1' : ''}`;
+    }
+    if (url.includes('vimeo.com')) {
+      const id = url.split('/').pop();
+      return `https://player.vimeo.com/video/${id}${autoplay ? '?autoplay=1&muted=1' : ''}`;
+    }
+    return null;
+  };
+
   return (
-    <section id="portfolio" className="py-24 bg-black">
+    <section id="portfolio" className="py-24 bg-black overflow-hidden">
       <div className="container px-4">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-8 text-center md:text-left">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -98,12 +112,12 @@ export function Portfolio() {
             </h3>
           </motion.div>
 
-          <div className="flex gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/10">
+          <div className="flex gap-1.5 bg-white/5 p-1.5 rounded-2xl border border-white/10 w-full md:w-auto overflow-x-auto justify-center">
             {["all", "photography", "videography"].map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-6 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                className={`px-4 md:px-6 py-2 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                   filter === f 
                     ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" 
                     : "text-blue-100/40 hover:text-white"
@@ -120,7 +134,7 @@ export function Portfolio() {
             <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence mode="popLayout">
               {filteredItems.map((item, index) => (
                 <motion.div
@@ -131,6 +145,8 @@ export function Portfolio() {
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.4 }}
                   className="group relative aspect-[4/5] rounded-3xl overflow-hidden cursor-pointer bg-neutral-900"
+                  onMouseEnter={() => item.type === 'videography' && setHoveredVideo(item.id || item.title)}
+                  onMouseLeave={() => setHoveredVideo(null)}
                   onClick={() => {
                     if (item.type === 'videography' && item.videoUrl) {
                       setSelectedVideo(item.videoUrl);
@@ -141,11 +157,33 @@ export function Portfolio() {
                     src={item.image}
                     alt={item.title}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
+                    className={`object-cover transition-all duration-700 group-hover:scale-110 ${hoveredVideo === (item.id || item.title) ? 'opacity-0' : 'opacity-70 group-hover:opacity-100'}`}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
                   
-                  <div className="absolute inset-0 flex flex-col justify-end p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                  {item.type === 'videography' && item.videoUrl && hoveredVideo === (item.id || item.title) && (
+                    <div className="absolute inset-0 z-0">
+                      {getEmbedUrl(item.videoUrl) ? (
+                        <iframe
+                          src={getEmbedUrl(item.videoUrl, true)!}
+                          className="w-full h-full pointer-events-none scale-150"
+                          allow="autoplay"
+                        />
+                      ) : (
+                        <video
+                          src={item.videoUrl}
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
+                  )}
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity z-10" />
+                  
+                  <div className="absolute inset-0 flex flex-col justify-end p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-500 z-20">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="p-1.5 rounded-lg bg-blue-600/80 backdrop-blur-sm text-white">
                         {item.type === "videography" ? <Play className="w-3 h-3 fill-current" /> : <Camera className="w-3 h-3" />}
