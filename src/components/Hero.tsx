@@ -10,11 +10,11 @@ export function Hero() {
         <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 bg-black">
             <div className="absolute inset-0 z-0">
               <div className="absolute inset-0 bg-black/70 z-10" />
-                <img 
-                  src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop" 
-                  alt="Wedding Photography Background" 
-                  className="w-full h-full object-cover scale-105"
-                />
+                  <img 
+                    src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=2070&auto=format&fit=crop" 
+                    alt="Professional Videography Background" 
+                    className="w-full h-full object-cover scale-105"
+                  />
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/40 to-black z-10" />
             </div>
 
