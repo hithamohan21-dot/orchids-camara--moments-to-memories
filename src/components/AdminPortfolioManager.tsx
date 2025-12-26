@@ -201,7 +201,6 @@ export function AdminPortfolioManager() {
                     placeholder="https://www.youtube.com/watch?v=..."
                     className="bg-black/50 border-white/10 text-white mt-2"
                   />
-                <p className="text-xs text-blue-100/20 mt-2">Or upload a video file below</p>
               </motion.div>
             )}
           </div>
