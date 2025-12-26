@@ -39,9 +39,9 @@ export function Testimonials() {
                 <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
               ))}
             </div>
-            <span className="text-sm font-medium text-blue-100">
-              5.0 Google Rating
-            </span>
+              <span className="text-sm font-medium text-blue-100">
+                5.0 Rating
+              </span>
           </motion.div>
           
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
