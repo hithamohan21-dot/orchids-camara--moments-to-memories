@@ -60,8 +60,8 @@ export function AdminPortfolioManager() {
       return;
     }
 
-    if (newItem.type === 'video' && !newItem.externalUrl && !file) {
-      toast.error("Please provide a video file or a YouTube/Instagram URL");
+    if (newItem.type === 'video' && !newItem.externalUrl) {
+      toast.error("Please provide a YouTube/Instagram URL");
       return;
     }
 
