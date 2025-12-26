@@ -20,8 +20,8 @@ export default function AdminLoginPage() {
     const DEFAULT_PASSWORD = "camara2024";
 
     useEffect(() => {
-      async function checkUser() {
-        const { data: { session } } = await supabase.auth.getSession();
+      function checkUser() {
+        const session = localStorage.getItem("admin_session");
         if (session) {
           router.push("/admin/dashboard");
         }
