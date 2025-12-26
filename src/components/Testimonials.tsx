@@ -80,13 +80,13 @@ export function Testimonials() {
           <div className="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-blue-100/40 text-sm">
             Verified Reviews from Google
           </div>
-          <button 
-            onClick={() => window.open("https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID", "_blank")}
-            className="flex items-center gap-2 px-8 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 active:scale-95"
-          >
-            Leave a Review
-            <Star className="w-4 h-4 fill-current" />
-          </button>
+            <button 
+              onClick={() => window.open("https://www.google.com/maps/place/CAMARA/@13.0667819,77.5526033,14z/data=!4m10!1m2!2m1!1sPhotographers+%26+Videographers+in+bengaluru!3m6!1s0x3bae18249d71ed4f:0xd21725d10dc59b37!8m2!3d13.0667819!4d77.5907121!15sCipQaG90b2dyYXBoZXJzICYgVmlkZW9ncmFwaGVycyBpbiBiZW5nYWx1cnVaLCIqcGhvdG9ncmFwaGVycyAmIHZpZGVvZ3JhcGhlcnMgaW4gYmVuZ2FsdXJ1kgEMcGhvdG9ncmFwaGVymgEkQ2hkRFNVaE5NRzluUzBWSlEwRm5TVVJ0YXpWWE9EZDNSUkFC4AEA-gEECG4QLQ!16s%2Fg%2F11cjn2yrg0?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", "_blank")}
+              className="flex items-center gap-2 px-8 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 active:scale-95"
+            >
+              Leave a Review
+              <Star className="w-4 h-4 fill-current" />
+            </button>
         </motion.div>
       </div>
     </section>
