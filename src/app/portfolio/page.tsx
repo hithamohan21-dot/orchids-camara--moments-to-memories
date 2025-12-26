@@ -4,6 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Play, Camera, ArrowLeft, Loader2, X } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import { Button } from "@/components/ui/button";
+import { Navbar } from "@/components/Navbar";
 
 // Video component to handle play/pause on hover
 function VideoThumbnail({ src, isHovered }: { src: string; isHovered: boolean }) {
@@ -31,6 +34,27 @@ function VideoThumbnail({ src, isHovered }: { src: string; isHovered: boolean })
     />
   );
 }
+
+const staticPortfolioItems = [
+  {
+    type: "photography",
+    title: "Elegant Wedding",
+    category: "Photography",
+    image: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1000",
+  },
+  {
+    type: "videography",
+    title: "Cinematic Highlights",
+    category: "Videography",
+    image: "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=1000",
+  },
+  {
+    type: "photography",
+    title: "Candid Moments",
+    category: "Photography",
+    image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=1000",
+  },
+];
 
 export default function PortfolioPage() {
   const [filter, setFilter] = useState("all");
@@ -74,20 +98,6 @@ export default function PortfolioPage() {
   const filteredItems = filter === "all" 
     ? items 
     : items.filter(item => item.type === filter);
-
-    const getEmbedUrl = (url: string, autoplay = true) => {
-      if (!url) return null;
-      if (url.includes('youtube.com') || url.includes('youtu.be')) {
-        const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
-        return `https://www.youtube.com/embed/${id}${autoplay ? '?autoplay=1&mute=1' : ''}`;
-      }
-      if (url.includes('instagram.com')) {
-        const parts = url.split('/').filter(Boolean);
-        const id = parts[parts.length - 1];
-        return `https://www.instagram.com/reel/${id}/embed`;
-      }
-      return null;
-    };
 
   return (
     <main className="min-h-screen bg-black text-white">
@@ -166,15 +176,11 @@ export default function PortfolioPage() {
                         />
                       ) : (
                         <div className="absolute inset-0">
-                          <video
-                            src={item.videoUrl}
-                            className={`w-full h-full object-cover transition-all duration-700 ${hoveredVideo === (item.id || item.title) ? 'scale-110 opacity-100' : 'opacity-50 group-hover:opacity-80'}`}
-                            muted
-                            loop
-                            playsInline
-                            autoPlay={hoveredVideo === (item.id || item.title)}
+                          <VideoThumbnail 
+                            src={item.videoUrl} 
+                            isHovered={hoveredVideo === (item.id || item.title)} 
                           />
-                          {!hoveredVideo && (
+                          {hoveredVideo !== (item.id || item.title) && (
                             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                               <Play className="w-12 h-12 text-white/20 group-hover:text-white/40 transition-colors" />
                             </div>
@@ -222,21 +228,12 @@ export default function PortfolioPage() {
               exit={{ scale: 0.9, opacity: 0 }}
               className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl"
             >
-              {getEmbedUrl(selectedVideo) ? (
-                <iframe
-                  src={getEmbedUrl(selectedVideo)!}
-                  className="w-full h-full"
-                  allow="autoplay; fullscreen; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : (
-                <video
-                  src={selectedVideo}
-                  controls
-                  autoPlay
-                  className="w-full h-full"
-                />
-              )}
+              <video
+                src={selectedVideo}
+                controls
+                autoPlay
+                className="w-full h-full"
+              />
             </motion.div>
           </motion.div>
         )}
