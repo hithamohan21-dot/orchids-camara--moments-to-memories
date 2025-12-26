@@ -44,9 +44,9 @@ export function Testimonials() {
             </span>
           </motion.div>
           
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Trusted by <span className="text-blue-400">60+</span> Happy Clients
-          </h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Trusted by <span className="text-blue-400">Our</span> Happy Clients
+            </h2>
           <p className="text-blue-100/40 max-w-2xl">
             See what our clients have to say about their experience with Camara Crew.
           </p>
