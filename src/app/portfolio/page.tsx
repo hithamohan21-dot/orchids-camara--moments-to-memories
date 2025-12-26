@@ -160,55 +160,63 @@ export default function PortfolioPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               <AnimatePresence mode="popLayout">
                   {filteredItems.map((item) => (
-                    <motion.div
-                      key={item.id || item.title}
-                      layout
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.4 }}
-                      className="group relative aspect-[4/5] rounded-3xl overflow-hidden cursor-pointer bg-neutral-900"
-                      onMouseEnter={() => item.type === 'videography' && setHoveredVideo(item.id || item.title)}
-                      onMouseLeave={() => setHoveredVideo(null)}
-                      onClick={() => {
-                        if (item.type === 'videography' && item.videoUrl) {
-                          setSelectedVideo(item.videoUrl);
-                        }
-                      }}
-                    >
-                      {item.type === 'photography' ? (
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          className="object-cover transition-all duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
-                        />
-                      ) : (
-                        <div className="absolute inset-0">
-                          <VideoThumbnail 
-                            src={item.videoUrl} 
-                            isHovered={hoveredVideo === (item.id || item.title)} 
+                      <motion.div
+                        key={item.id || item.title}
+                        layout
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.4 }}
+                        className="group relative aspect-[4/5] rounded-3xl overflow-hidden cursor-pointer bg-neutral-900 border border-white/5 hover:border-blue-500/50 transition-colors"
+                        onMouseEnter={() => item.type === 'videography' && setHoveredVideo(item.id || item.title)}
+                        onMouseLeave={() => setHoveredVideo(null)}
+                        onClick={() => {
+                          if (item.type === 'videography' && item.videoUrl) {
+                            setSelectedVideo(item.videoUrl);
+                          }
+                        }}
+                      >
+                        {item.type === 'photography' ? (
+                          <Image
+                            src={item.image}
+                            alt={item.title}
+                            fill
+                            className="object-cover transition-all duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100"
                           />
-                          {hoveredVideo !== (item.id || item.title) && (
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                              <Play className="w-12 h-12 text-white/20 group-hover:text-white/40 transition-colors" />
-                            </div>
-                          )}
-                        </div>
-                      )}
+                        ) : (
+                          <div className="absolute inset-0">
+                            <VideoThumbnail 
+                              src={item.videoUrl} 
+                              isHovered={hoveredVideo === (item.id || item.title)} 
+                            />
+                            {hoveredVideo !== (item.id || item.title) && (
+                              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform border border-white/20">
+                                  <Play className="w-6 h-6 text-white fill-current" />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-60 group-hover:opacity-90 transition-opacity z-10" />
                       
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity z-10" />
-                    
-                    <div className="absolute inset-0 flex flex-col justify-end p-6 z-20">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="p-1.5 rounded-lg bg-blue-600/80 backdrop-blur-sm text-white">
-                          {item.type === "videography" ? <Play className="w-3 h-3 fill-current" /> : <Camera className="w-3 h-3" />}
-                        </span>
-                        <span className="text-xs font-semibold text-blue-400 uppercase tracking-widest">{item.category}</span>
+                      <div className="absolute inset-0 flex flex-col justify-end p-6 z-20">
+                        <div className="flex items-center justify-between mb-3 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                          <div className="flex items-center gap-2">
+                            <span className="p-2 rounded-xl bg-blue-600 shadow-lg shadow-blue-600/30 text-white">
+                              {item.type === "videography" ? <Play className="w-3.5 h-3.5 fill-current" /> : <Camera className="w-3.5 h-3.5" />}
+                            </span>
+                            <span className="text-xs font-bold text-blue-400 uppercase tracking-[0.2em]">{item.category}</span>
+                          </div>
+                          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-[10px] font-bold text-white/50 uppercase tracking-widest">
+                            {item.type === 'videography' ? 'Watch Now' : 'View Project'}
+                          </span>
+                        </div>
+                        <h4 className="text-xl font-bold text-white mb-1 group-hover:text-blue-500 transition-colors duration-300">{item.title}</h4>
+                        <div className="w-0 group-hover:w-full h-0.5 bg-blue-500 transition-all duration-500" />
                       </div>
-                      <h4 className="text-xl font-bold text-white mb-2">{item.title}</h4>
-                    </div>
-                  </motion.div>
+                    </motion.div>
                 ))}
               </AnimatePresence>
             </div>
