@@ -54,10 +54,10 @@ export function Hero() {
             moments to memories
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-center w-full max-w-lg mx-auto sm:max-w-none">
               <Button
                 size="lg"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 h-14 rounded-full text-lg group"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 h-14 rounded-full text-lg group w-full sm:w-auto"
                 onClick={() => document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })}
               >
                 View Portfolio
@@ -65,22 +65,13 @@ export function Hero() {
               </Button>
               <Button
                 size="lg"
-                className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-8 h-14 rounded-full text-lg transition-all"
+                className="bg-white/10 hover:bg-white/20 border border-white/20 text-white px-8 h-14 rounded-full text-lg transition-all w-full sm:w-auto"
                 onClick={() => window.location.href = "tel:9845374999"}
               >
                 <Phone className="mr-2 h-5 w-5" />
                 Call Now
               </Button>
-            <Button
-              size="lg"
-              variant="ghost"
-              className="text-white hover:bg-white/5 px-8 h-14 rounded-full text-lg group"
-              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-            >
-              Book an Enquiry
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </div>
+            </div>
 
           <motion.div
             initial={{ opacity: 0 }}
