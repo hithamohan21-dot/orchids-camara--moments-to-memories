@@ -226,6 +226,40 @@ export function Portfolio() {
         </div>
       </div>
 
+      {/* Image Modal */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-12"
+            onClick={() => setSelectedImage(null)}
+          >
+            <button 
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-6 right-6 text-white hover:text-blue-400 transition-colors z-[110]"
+            >
+              <X className="w-8 h-8" />
+            </button>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative w-full max-w-5xl aspect-[4/5] md:aspect-auto md:h-[80vh] bg-black rounded-2xl overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Image
+                src={selectedImage}
+                alt="Portfolio view"
+                fill
+                className="object-contain"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Video Modal */}
       <AnimatePresence>
         {selectedVideo && (
