@@ -72,18 +72,19 @@ export default function PortfolioPage() {
     ? items 
     : items.filter(item => item.type === filter);
 
-  const getEmbedUrl = (url: string, autoplay = true) => {
-    if (!url) return null;
-    if (url.includes('youtube.com') || url.includes('youtu.be')) {
-      const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
-      return `https://www.youtube.com/embed/${id}${autoplay ? '?autoplay=1&mute=1' : ''}`;
-    }
-    if (url.includes('vimeo.com')) {
-      const id = url.split('/').pop();
-      return `https://player.vimeo.com/video/${id}${autoplay ? '?autoplay=1&muted=1' : ''}`;
-    }
-    return null;
-  };
+    const getEmbedUrl = (url: string, autoplay = true) => {
+      if (!url) return null;
+      if (url.includes('youtube.com') || url.includes('youtu.be')) {
+        const id = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
+        return `https://www.youtube.com/embed/${id}${autoplay ? '?autoplay=1&mute=1' : ''}`;
+      }
+      if (url.includes('instagram.com')) {
+        const parts = url.split('/').filter(Boolean);
+        const id = parts[parts.length - 1];
+        return `https://www.instagram.com/reel/${id}/embed`;
+      }
+      return null;
+    };
 
   return (
     <main className="min-h-screen bg-black text-white">
