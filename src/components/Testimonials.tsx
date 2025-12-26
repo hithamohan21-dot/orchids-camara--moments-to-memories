@@ -28,21 +28,18 @@ export function Testimonials() {
       
       <div className="container px-4">
         <div className="flex flex-col items-center text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-2 mb-6 bg-blue-500/10 border border-blue-500/20 px-4 py-1.5 rounded-full"
-          >
-            <div className="flex gap-0.5">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
-              ))}
-            </div>
-              <span className="text-sm font-medium text-blue-100">
-                5.0 Rating
-              </span>
-          </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="flex items-center gap-2 mb-6 bg-blue-500/10 border border-blue-500/20 px-4 py-1.5 rounded-full"
+            >
+              <div className="flex gap-0.5">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
+                ))}
+              </div>
+            </motion.div>
           
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
               Trusted by <span className="text-blue-400">Our</span> Happy Clients
