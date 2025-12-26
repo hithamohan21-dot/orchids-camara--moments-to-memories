@@ -1,0 +1,101 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Star, Phone, ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { Logo } from "./Logo";
+
+export function Hero() {
+  return (
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2400"
+          alt="Wedding Photography"
+          fill
+          className="object-cover opacity-60 scale-105"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black" />
+      </div>
+
+      <div className="container relative z-10 px-4 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="flex flex-col items-center"
+        >
+          <div className="mb-6 opacity-80 scale-75 md:scale-100">
+            <Logo />
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="flex items-center gap-2 mb-4 bg-blue-500/10 border border-blue-500/20 px-4 py-1.5 rounded-full"
+          >
+            <div className="flex gap-0.5">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
+              ))}
+            </div>
+            <span className="text-sm font-medium text-blue-100">
+              5.0 (61 Reviews)
+            </span>
+          </motion.div>
+
+          <h1 className="text-5xl md:text-8xl font-bold tracking-tight mb-4 text-white">
+            CAMARA
+          </h1>
+          <p className="text-xl md:text-2xl font-light text-blue-100/80 mb-12 tracking-widest uppercase">
+            moments to memories
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+            <Button
+              size="lg"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 h-14 rounded-full text-lg group"
+              onClick={() => window.location.href = "tel:9845374999"}
+            >
+              <Phone className="mr-2 h-5 w-5" />
+              Call Now
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white/20 hover:bg-white/10 text-white px-8 h-14 rounded-full text-lg"
+              onClick={() => document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              View Portfolio
+            </Button>
+            <Button
+              size="lg"
+              variant="ghost"
+              className="text-white hover:bg-white/5 px-8 h-14 rounded-full text-lg group"
+              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+            >
+              Book an Enquiry
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 1 }}
+            className="mt-16 text-white/40 text-sm tracking-widest uppercase"
+          >
+            Bengaluru, Karnataka
+          </motion.div>
+        </motion.div>
+      </div>
+
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-30">
+        <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent" />
+      </div>
+    </section>
+  );
+}
