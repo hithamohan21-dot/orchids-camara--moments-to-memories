@@ -78,11 +78,18 @@ export function Testimonials() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="mt-16 flex justify-center"
+          className="mt-16 flex flex-col items-center gap-6"
         >
           <div className="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-blue-100/40 text-sm">
-            Verified Reviews from Google (61 Total)
+            Verified Reviews from Google
           </div>
+          <button 
+            onClick={() => window.open("https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID", "_blank")}
+            className="flex items-center gap-2 px-8 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 active:scale-95"
+          >
+            Leave a Review
+            <Star className="w-4 h-4 fill-current" />
+          </button>
         </motion.div>
       </div>
     </section>
