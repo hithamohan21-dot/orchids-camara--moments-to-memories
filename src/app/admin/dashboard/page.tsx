@@ -50,14 +50,6 @@ export default function AdminDashboardPage() {
             <LayoutDashboard className="mr-3 h-5 w-5" />
             Portfolio
           </Button>
-          <Button variant="ghost" className="w-full justify-start text-white/60 hover:text-white hover:bg-white/5">
-            <User className="mr-3 h-5 w-5" />
-            Profile
-          </Button>
-          <Button variant="ghost" className="w-full justify-start text-white/60 hover:text-white hover:bg-white/5">
-            <Settings className="mr-3 h-5 w-5" />
-            Settings
-          </Button>
         </nav>
 
         <Button 
