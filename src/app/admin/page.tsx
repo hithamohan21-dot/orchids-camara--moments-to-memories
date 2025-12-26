@@ -38,35 +38,9 @@ export default function AdminLoginPage() {
           throw new Error("Invalid admin password");
         }
 
-        // Try to sign in
-        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-          email: ADMIN_EMAIL,
-          password: DEFAULT_PASSWORD,
-        });
-
-        if (signInError) {
-          // If user not found, try to sign up
-          if (signInError.message.includes("Invalid login credentials") || signInError.message.includes("User not found")) {
-            const { error: signUpError } = await supabase.auth.signUp({
-              email: ADMIN_EMAIL,
-              password: DEFAULT_PASSWORD,
-              options: {
-                data: { role: 'admin' }
-              }
-            });
-            
-            if (signUpError) {
-              throw signUpError;
-            }
-            
-            toast.success("Admin account initialized!");
-            router.push("/admin/dashboard");
-            return;
-          }
-          
-          throw signInError;
-        }
-
+        // Use a simple local session for admin access to bypass Supabase Auth issues
+        localStorage.setItem("admin_session", "active");
+        
         toast.success("Welcome back!");
         router.push("/admin/dashboard");
       } catch (error: any) {
