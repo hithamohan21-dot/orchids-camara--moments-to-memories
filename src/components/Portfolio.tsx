@@ -159,13 +159,15 @@ export function Portfolio() {
                   transition={{ duration: 0.4 }}
                   className="group relative aspect-[4/5] rounded-3xl overflow-hidden cursor-pointer bg-neutral-900 border border-white/5 hover:border-blue-500/50 transition-colors"
                   onMouseEnter={() => item.type === 'videography' && setHoveredVideo(item.id || item.title)}
-                  onMouseLeave={() => setHoveredVideo(null)}
-                  onClick={() => {
-                    if (item.type === 'videography' && item.videoUrl) {
-                      setSelectedVideo(item.videoUrl);
-                    }
-                  }}
-                >
+                    onMouseLeave={() => setHoveredVideo(null)}
+                    onClick={() => {
+                      if (item.type === 'videography' && item.videoUrl) {
+                        setSelectedVideo(item.videoUrl);
+                      } else if (item.type === 'photography') {
+                        setSelectedImage(item.image);
+                      }
+                    }}
+                  >
                   {item.type === 'photography' ? (
                     <Image
                       src={item.image}
