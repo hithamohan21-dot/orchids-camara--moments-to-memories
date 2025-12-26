@@ -85,7 +85,7 @@ export function Portfolio() {
 
   return (
     <section id="portfolio" className="py-24 bg-black overflow-hidden">
-      <div className="container px-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-8 text-center md:text-left">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -100,7 +100,7 @@ export function Portfolio() {
             </h3>
           </motion.div>
 
-          <div className="flex gap-1.5 bg-white/5 p-1.5 rounded-2xl border border-white/10 w-full md:w-auto overflow-x-auto justify-center">
+          <div className="flex gap-1.5 bg-white/5 p-1.5 rounded-2xl border border-white/10 w-full md:w-auto overflow-x-auto justify-center scrollbar-hide">
             {["all", "photography", "videography"].map((f) => (
               <button
                 key={f}
@@ -122,7 +122,7 @@ export function Portfolio() {
             <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <AnimatePresence mode="popLayout">
               {filteredItems.map((item) => (
                 <motion.div
