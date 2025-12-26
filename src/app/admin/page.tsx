@@ -17,6 +17,7 @@ export default function AdminLoginPage() {
   const router = useRouter();
 
   const ADMIN_EMAIL = "admin@camara.com";
+  const DEFAULT_PASSWORD = "camara2024";
 
   useEffect(() => {
     async function checkUser() {
@@ -33,21 +34,25 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      // Try login first
+      // First, try to sign up if the user doesn't exist (one-time setup)
+      // We check if password matches our desired admin password
+      if (password !== DEFAULT_PASSWORD) {
+        throw new Error("Invalid admin password");
+      }
+
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: ADMIN_EMAIL,
-        password,
+        password: DEFAULT_PASSWORD,
       });
 
       if (signInError) {
-        // If user doesn't exist, try to sign up (first time setup)
-        if (signInError.message.includes("Invalid login credentials")) {
+        if (signInError.message.includes("Invalid login credentials") || signInError.message.includes("User not found")) {
           const { error: signUpError } = await supabase.auth.signUp({
             email: ADMIN_EMAIL,
-            password,
+            password: DEFAULT_PASSWORD,
           });
           if (signUpError) throw signUpError;
-          toast.success("Admin account created! Logging in...");
+          toast.success("Admin account initialized!");
           router.push("/admin/dashboard");
           return;
         }
@@ -73,11 +78,11 @@ export default function AdminLoginPage() {
       
       <div className="w-full max-w-md bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl">
         <h1 className="text-3xl font-bold text-white mb-2">Admin Access</h1>
-        <p className="text-blue-100/40 mb-8">Enter your password to manage your portfolio</p>
+        <p className="text-blue-100/40 mb-8">Enter the admin password to access the dashboard</p>
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-2">
-            <Label className="text-blue-100/60">Password</Label>
+            <Label className="text-blue-100/60">Admin Password</Label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-blue-100/20" />
               <Input
