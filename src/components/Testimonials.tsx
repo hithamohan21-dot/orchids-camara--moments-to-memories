@@ -1,93 +1,163 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star, Quote } from "lucide-react";
+import { Star, Quote, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
+import Image from "next/image";
 
-const testimonials = [
+const staticTestimonials = [
   {
-    quote: "Very friendly staff and their work is awesome.",
-    author: "Sneha Reddy",
-    role: "Wedding Client",
+    review_text: "Very friendly staff and their work is awesome. They captured our wedding so beautifully.",
+    author_name: "Sneha Reddy",
+    role: "Wedding Photography",
+    author_image_url: "https://i.pravatar.cc/150?u=sneha",
+    rating: 5,
+    photos: []
   },
   {
-    quote: "They captured every moment beautifully. Highly recommended!",
-    author: "Rahul Sharma",
-    role: "Event Client",
+    review_text: "They captured every moment beautifully. Highly recommended for any event!",
+    author_name: "Rahul Sharma",
+    role: "Event Videography",
+    author_image_url: "https://i.pravatar.cc/150?u=rahul",
+    rating: 5,
+    photos: []
   },
   {
-    quote: "Highly professional and punctual team. Exceptional quality.",
-    author: "Priya Das",
-    role: "Corporate Client",
-  },
+    review_text: "The best photography team in Bengaluru! 32 years of experience really shows in their work.",
+    author_name: "Vikram Singh",
+    role: "Candid Photography",
+    author_image_url: "https://i.pravatar.cc/150?u=vikram",
+    rating: 5,
+    photos: []
+  }
 ];
 
 export function Testimonials() {
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchReviews() {
+      try {
+        const { data, error } = await supabase
+          .from("reviews")
+          .select("*")
+          .eq("is_approved", true)
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+        setReviews(data || []);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchReviews();
+  }, []);
+
+  const displayReviews = reviews.length > 0 ? reviews : staticTestimonials;
+
   return (
-    <section id="testimonials" className="py-24 bg-neutral-950 relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" />
-      
-      <div className="container px-4">
-        <div className="flex flex-col items-center text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="flex items-center gap-2 mb-6 bg-blue-500/10 border border-blue-500/20 px-4 py-1.5 rounded-full"
-            >
-              <div className="flex gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
-                ))}
-              </div>
-            </motion.div>
-          
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Trusted by <span className="text-blue-400">Our</span> Happy Clients
-            </h2>
-          <p className="text-blue-100/40 max-w-2xl">
-            See what our clients have to say about their experience with Camara Crew.
+    <section id="reviews" className="py-24 bg-white relative overflow-hidden border-t border-zinc-100">
+      <div className="container px-4 mb-16">
+        <div className="flex flex-col items-center text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-2 mb-6 bg-zinc-100 border border-zinc-200 px-6 py-2 rounded-full"
+          >
+            <div className="flex gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+              ))}
+            </div>
+          </motion.div>
+        
+          <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
+            Loved by <span className="text-blue-600">Our</span> Clients
+          </h2>
+          <p className="text-zinc-500 max-w-2xl">
+            Read what our clients have to say about their experience with Camara Crew.
           </p>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="relative p-8 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/[0.08] transition-colors group"
-            >
-              <Quote className="absolute top-6 right-8 w-10 h-10 text-blue-500/10 group-hover:text-blue-500/20 transition-colors" />
-              <p className="text-lg text-blue-50/80 mb-8 italic relative z-10">
-                "{testimonial.quote}"
-              </p>
-              <div>
-                <h4 className="text-white font-bold tracking-wide">{testimonial.author}</h4>
-                <p className="text-blue-400/60 text-sm tracking-widest uppercase">{testimonial.role}</p>
+      <div className="relative">
+        <div className="flex gap-8 overflow-hidden">
+          <motion.div
+            animate={{
+              x: [0, -2000],
+            }}
+            transition={{
+              x: {
+                repeat: Infinity,
+                repeatType: "loop",
+                duration: 60,
+                ease: "linear",
+              },
+            }}
+            className="flex gap-8 shrink-0"
+          >
+            {[...displayReviews, ...displayReviews, ...displayReviews].map((testimonial, index) => (
+              <div
+                key={index}
+                className="w-[400px] p-8 rounded-[2rem] bg-zinc-50 border border-zinc-200 flex flex-col gap-6 shadow-sm hover:shadow-xl transition-all duration-500 group"
+              >
+                <div className="flex flex-col gap-4">
+                  <div className="flex justify-between items-start">
+                    <Quote className="w-10 h-10 text-blue-100" />
+                    <div className="flex">
+                      {[...Array(testimonial.rating || 5)].map((_, i) => (
+                        <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-zinc-600 text-lg leading-relaxed italic">
+                    "{testimonial.review_text}"
+                  </p>
+                </div>
+
+                {testimonial.photos && testimonial.photos.length > 0 && (
+                  <div className="grid grid-cols-3 gap-2 h-20 overflow-hidden">
+                    {testimonial.photos.slice(0, 3).map((photo: string, i: number) => (
+                      <div key={i} className="relative rounded-xl overflow-hidden aspect-square">
+                        <Image src={photo} alt="Review photo" fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex items-center gap-4 pt-6 border-t border-zinc-100">
+                  <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md bg-zinc-200">
+                    {testimonial.author_image_url ? (
+                      <img src={testimonial.author_image_url} alt={testimonial.author_name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-zinc-400 text-xs font-bold uppercase">
+                        {testimonial.author_name?.charAt(0)}
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="text-black font-bold text-sm">{testimonial.author_name}</h4>
+                    <p className="text-blue-600 text-[10px] font-bold uppercase tracking-widest">{testimonial.role || "Verified Client"}</p>
+                  </div>
+                </div>
               </div>
-            </motion.div>
-          ))}
+            ))}
+          </motion.div>
         </div>
+        
+        <div className="absolute top-0 bottom-0 left-0 w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10 hidden md:block" />
+        <div className="absolute top-0 bottom-0 right-0 w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 hidden md:block" />
+      </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="mt-16 flex flex-col items-center gap-6"
-        >
-          <div className="px-6 py-3 rounded-2xl bg-white/5 border border-white/10 text-blue-100/40 text-sm">
-            Verified Reviews from Google
-          </div>
-            <button 
-              onClick={() => window.open("https://www.google.com/maps/place/CAMARA/@13.0667819,77.5526033,14z/data=!4m10!1m2!2m1!1sPhotographers+%26+Videographers+in+bengaluru!3m6!1s0x3bae18249d71ed4f:0xd21725d10dc59b37!8m2!3d13.0667819!4d77.5907121!15sCipQaG90b2dyYXBoZXJzICYgVmlkZW9ncmFwaGVycyBpbiBiZW5nYWx1cnVaLCIqcGhvdG9ncmFwaGVycyAmIHZpZGVvZ3JhcGhlcnMgaW4gYmVuZ2FsdXJ1kgEMcGhvdG9ncmFwaGVymgEkQ2hkRFNVaE5NRzluUzBWSlEwRm5TVVJ0YXpWWE9EZDNSUkFC4AEA-gEECG4QLQ!16s%2Fg%2F11cjn2yrg0?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D", "_blank")}
-              className="flex items-center gap-2 px-8 py-3 rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 active:scale-95"
-            >
-              Leave a Review
-              <Star className="w-4 h-4 fill-current" />
-            </button>
-        </motion.div>
+      <div className="mt-16 text-center">
+        <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-zinc-100 text-zinc-500 text-sm font-medium border border-zinc-200">
+          5.0 Average Rating on Google
+        </div>
       </div>
     </section>
   );

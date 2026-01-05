@@ -1,6 +1,5 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { Button } from "./ui/button";
@@ -17,20 +16,42 @@ interface PortfolioItem {
   description: string;
   type: 'image' | 'video';
   url: string;
-  thumbnail_url?: string;
+  category: string;
+  sub_category: string;
 }
+
+const mainCategories = ["Photography", "Videography"];
+
+const subCategoriesMap: Record<string, string[]> = {
+  "Photography": [
+    "Wedding Photography",
+    "Candid Photography",
+    "Pre-Wedding Photography",
+    "Event Photography",
+    "Corporate Photography"
+  ],
+  "Videography": [
+    "Wedding Videography",
+    "Candid Videography",
+    "Pre-Wedding Videography",
+    "Event Videography",
+    "Corporate Videography"
+  ]
+};
 
 export function AdminPortfolioManager() {
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-    const [newItem, setNewItem] = useState({
-      title: "",
-      description: "",
-      type: "image" as "image" | "video",
-    });
-    const [file, setFile] = useState<File | null>(null);
-    const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [newItem, setNewItem] = useState({
+    title: "",
+    description: "",
+    type: "image" as "image" | "video",
+    category: mainCategories[0],
+    sub_category: subCategoriesMap[mainCategories[0]][0]
+  });
+  const [file, setFile] = useState<File | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchItems();
@@ -94,12 +115,20 @@ export function AdminPortfolioManager() {
           description: newItem.description,
           type: newItem.type,
           url: finalUrl,
+          category: newItem.category,
+          sub_category: newItem.sub_category
         }]);
 
       if (dbError) throw dbError;
 
       toast.success("Item added successfully");
-      setNewItem({ title: "", description: "", type: "image" });
+      setNewItem({ 
+        title: "", 
+        description: "", 
+        type: "image", 
+        category: mainCategories[0],
+        sub_category: subCategoriesMap[mainCategories[0]][0]
+      });
       setFile(null);
       fetchItems();
     } catch (error: any) {
@@ -111,7 +140,6 @@ export function AdminPortfolioManager() {
 
   async function handleDelete(id: string, url: string) {
     try {
-      // Try to delete from storage if it's a Supabase URL
       if (url.includes('supabase.co')) {
         const path = url.split('/').pop();
         if (path) {
@@ -135,54 +163,81 @@ export function AdminPortfolioManager() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
-        <h3 className="text-2xl font-bold text-white mb-6">Add New Content</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <div>
-              <Label className="text-blue-100/60">Title</Label>
-              <Input
-                value={newItem.title}
-                onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
-                placeholder="Ex: Wedding Highlights"
-                className="bg-black/50 border-white/10 text-white"
-              />
-            </div>
-            <div>
-              <Label className="text-blue-100/60">Type</Label>
-              <div className="flex p-1 bg-black/50 border border-white/10 rounded-xl mt-2 w-full max-w-xs relative overflow-hidden h-11">
-                <motion.div
-                  className="absolute inset-y-1 bg-blue-600 rounded-lg z-0"
-                  initial={false}
-                  animate={{
-                    left: newItem.type === 'image' ? '4px' : 'calc(50% + 2px)',
-                    width: 'calc(50% - 6px)',
-                  }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+    <div className="space-y-12">
+      <div className="bg-white border border-zinc-200 rounded-[2rem] p-10 shadow-sm">
+        <div className="flex items-center gap-4 mb-8">
+          <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white">
+            <Plus className="w-6 h-6" />
+          </div>
+          <h3 className="text-2xl font-bold">Add New Work</h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="space-y-6">
+              <div>
+                <Label className="text-zinc-500 font-bold uppercase tracking-widest text-[10px] mb-2 block">Project Title</Label>
+                <Input
+                  value={newItem.title}
+                  onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
+                  placeholder="Ex: Sharma Wedding Highlights"
+                  className="rounded-xl border-zinc-200 focus:ring-blue-600 h-12"
                 />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-zinc-500 font-bold uppercase tracking-widest text-[10px] mb-2 block">Main Category</Label>
+                  <select
+                    value={newItem.category}
+                    onChange={(e) => {
+                      const cat = e.target.value;
+                      setNewItem({ 
+                        ...newItem, 
+                        category: cat,
+                        sub_category: subCategoriesMap[cat][0]
+                      });
+                    }}
+                    className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  >
+                    {mainCategories.map((cat) => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <Label className="text-zinc-500 font-bold uppercase tracking-widest text-[10px] mb-2 block">Sub Category</Label>
+                  <select
+                    value={newItem.sub_category}
+                    onChange={(e) => setNewItem({ ...newItem, sub_category: e.target.value })}
+                    className="w-full h-12 px-4 rounded-xl border border-zinc-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  >
+                    {subCategoriesMap[newItem.category].map((sub) => (
+                      <option key={sub} value={sub}>{sub}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-zinc-500 font-bold uppercase tracking-widest text-[10px] mb-2 block">Media Type</Label>
+              <div className="flex p-1 bg-zinc-100 rounded-xl w-full relative h-12">
                 <button
                   type="button"
-                  onClick={() => {
-                    setNewItem({ ...newItem, type: 'image' });
-                    setFile(null);
-                  }}
+                  onClick={() => setNewItem({ ...newItem, type: 'image' })}
                   className={cn(
-                    "flex-1 flex items-center justify-center rounded-lg text-sm font-medium z-10 transition-colors",
-                    newItem.type === 'image' ? "text-white" : "text-white/40 hover:text-white"
+                    "flex-1 flex items-center justify-center rounded-lg text-sm font-bold z-10 transition-all",
+                    newItem.type === 'image' ? "bg-white text-blue-600 shadow-sm" : "text-zinc-400 hover:text-zinc-600"
                   )}
                 >
                   <ImageIcon className="mr-2 h-4 w-4" /> Photo
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    setNewItem({ ...newItem, type: 'video' });
-                    setFile(null);
-                  }}
+                  onClick={() => setNewItem({ ...newItem, type: 'video' })}
                   className={cn(
-                    "flex-1 flex items-center justify-center rounded-lg text-sm font-medium z-10 transition-colors",
-                    newItem.type === 'video' ? "text-white" : "text-white/40 hover:text-white"
+                    "flex-1 flex items-center justify-center rounded-lg text-sm font-bold z-10 transition-all",
+                    newItem.type === 'video' ? "bg-white text-blue-600 shadow-sm" : "text-zinc-400 hover:text-zinc-600"
                   )}
                 >
                   <Video className="mr-2 h-4 w-4" /> Video
@@ -190,113 +245,125 @@ export function AdminPortfolioManager() {
               </div>
             </div>
           </div>
-          <div className="space-y-4">
-            <Label className="text-blue-100/60">
-              {newItem.type === 'image' ? 'Upload Photo' : 'Upload Video'}
-            </Label>
-            <div 
-              className="border-2 border-dashed border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center gap-4 hover:border-blue-500/50 transition-colors cursor-pointer bg-black/20"
-              onClick={() => document.getElementById('file-upload')?.click()}
-            >
-              <Input
-                id="file-upload"
-                type="file"
-                className="hidden"
-                accept={newItem.type === 'image' ? "image/*" : "video/*"}
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
-              />
-              {file ? (
-                <div className="text-center">
-                  <p className="text-white font-medium">{file.name}</p>
-                  <p className="text-blue-400 text-sm">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
-                </div>
-              ) : (
-                <>
-                  <Plus className="h-10 w-10 text-blue-500/50" />
-                  <p className="text-blue-100/40 text-sm">
-                    Click to select {newItem.type === 'image' ? 'photo' : 'video'}
-                  </p>
-                </>
-              )}
+
+          <div className="space-y-6">
+            <div>
+              <Label className="text-zinc-500 font-bold uppercase tracking-widest text-[10px] mb-2 block">
+                {newItem.type === 'image' ? 'Upload Photo' : 'Upload Video'}
+              </Label>
+              <div 
+                className="border-2 border-dashed border-zinc-200 rounded-3xl p-12 flex flex-col items-center justify-center gap-4 hover:border-blue-600 hover:bg-blue-50/50 transition-all cursor-pointer group"
+                onClick={() => document.getElementById('file-upload')?.click()}
+              >
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="hidden"
+                  accept={newItem.type === 'image' ? "image/*" : "video/*"}
+                  onChange={(e) => setFile(e.target.files?.[0] || null)}
+                />
+                {file ? (
+                  <div className="text-center">
+                    <p className="text-black font-bold">{file.name}</p>
+                    <p className="text-blue-600 text-xs mt-1">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="w-16 h-16 rounded-2xl bg-zinc-50 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Plus className="h-8 w-8 text-zinc-300 group-hover:text-blue-600" />
+                    </div>
+                    <p className="text-zinc-400 text-sm font-medium">
+                      Select {newItem.type} file to upload
+                    </p>
+                  </>
+                )}
+              </div>
             </div>
+            
             <Button
-              className="w-full bg-blue-600 hover:bg-blue-700 h-12 text-lg"
+              className="w-full bg-blue-600 hover:bg-blue-700 h-14 rounded-xl text-lg font-bold shadow-xl shadow-blue-600/20"
               disabled={uploading || !file || !newItem.title}
               onClick={handleUpload}
             >
-              {uploading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Save to Portfolio"}
+              {uploading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Confirm & Upload"}
             </Button>
           </div>
         </div>
       </div>
 
-      <div className="space-y-6">
-        <h3 className="text-2xl font-bold text-white">Current Portfolio</h3>
+      <div className="space-y-8">
+        <div className="flex items-center justify-between">
+          <h3 className="text-2xl font-bold">Recent Portfolio</h3>
+          <span className="px-4 py-1.5 rounded-full bg-zinc-100 text-zinc-500 text-xs font-bold uppercase tracking-widest">
+            {items.length} Total Items
+          </span>
+        </div>
+
         {loading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-500" />
+          <div className="flex justify-center py-20">
+            <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
           </div>
         ) : items.length === 0 ? (
-          <div className="text-center py-12 bg-white/5 border border-white/10 rounded-3xl">
-            <AlertCircle className="h-12 w-12 text-blue-100/20 mx-auto mb-4" />
-            <p className="text-blue-100/40">No items in your portfolio yet.</p>
+          <div className="text-center py-20 bg-white border border-zinc-200 rounded-[2rem]">
+            <AlertCircle className="h-12 w-12 text-zinc-200 mx-auto mb-4" />
+            <p className="text-zinc-400 font-medium">Your portfolio is currently empty.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {items.map((item) => (
-                <div key={item.id} className="group relative aspect-[4/5] rounded-2xl overflow-hidden bg-neutral-900 border border-white/10">
+                <div key={item.id} className="group relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-zinc-100 border border-zinc-200 shadow-sm hover:shadow-xl transition-all duration-500">
                   {item.type === 'image' ? (
                     <Image
                       src={item.url}
                       alt={item.title}
                       fill
-                      className="object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                   ) : (
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/0 transition-colors">
+                    <div className="absolute inset-0">
                       <video 
                         src={item.url}
-                        className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         muted
                         playsInline
                       />
-                      <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity">
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-transparent transition-colors">
                         <Video className="h-12 w-12 text-white/50" />
                       </div>
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
                   <div className="absolute inset-0 p-6 flex flex-col justify-end">
                     <div className="flex justify-between items-end gap-4">
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-white font-bold truncate text-lg">{item.title}</h4>
-                        <p className="text-blue-400 text-xs uppercase tracking-widest font-semibold">{item.type}</p>
+                        <span className="px-2 py-0.5 rounded-md bg-blue-600 text-white text-[8px] font-black uppercase tracking-widest mb-1 inline-block">{item.category}</span>
+                        <h4 className="text-white font-bold truncate text-base">{item.title}</h4>
                       </div>
                       
                       {deleteId === item.id ? (
-                        <div className="flex gap-2">
+                        <div className="flex flex-col gap-2">
                           <Button 
                             variant="destructive" 
                             size="sm" 
                             onClick={() => handleDelete(item.id, item.url)}
-                            className="text-xs h-8 px-2"
+                            className="text-[10px] h-7 font-bold uppercase"
                           >
-                            Confirm
+                            Yes
                           </Button>
                           <Button 
-                            variant="ghost" 
+                            variant="secondary" 
                             size="sm" 
                             onClick={() => setDeleteId(null)}
-                            className="text-xs h-8 px-2 text-white/40 hover:text-white"
+                            className="text-[10px] h-7 font-bold uppercase"
                           >
-                            Cancel
+                            No
                           </Button>
                         </div>
                       ) : (
                         <Button
                           variant="destructive"
                           size="icon"
-                          className="rounded-xl h-10 w-10 shrink-0 md:opacity-0 group-hover:opacity-100 transition-all hover:scale-110"
+                          className="rounded-xl h-10 w-10 shrink-0 shadow-lg"
                           onClick={() => setDeleteId(item.id)}
                         >
                           <Trash2 className="h-5 w-5" />

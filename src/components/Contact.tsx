@@ -10,60 +10,61 @@ export function Contact() {
   const whatsappUrl = `https://wa.me/91${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
-    <section id="contact" className="py-24 bg-black relative">
+    <section id="contact" className="py-24 bg-white relative">
       <div className="container px-4">
-        <div className="max-w-5xl mx-auto bg-neutral-900 rounded-[3rem] overflow-hidden border border-white/5 shadow-2xl">
+        <div className="max-w-5xl mx-auto bg-zinc-50 rounded-[3rem] overflow-hidden border border-zinc-200 shadow-2xl">
           <div className="grid grid-cols-1 lg:grid-cols-2">
-            <div className="p-8 md:p-16 lg:border-r border-white/5">
+            <div className="p-8 md:p-16 lg:border-r border-zinc-200">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                <h2 className="text-blue-500 font-medium tracking-widest uppercase mb-4">
+                <h2 className="text-blue-600 font-medium tracking-widest uppercase mb-4">
                   Contact Us
                 </h2>
-                <h3 className="text-4xl md:text-5xl font-bold text-white mb-8">
-                  Let's capture your <span className="text-blue-400">story</span>.
+                <h3 className="text-4xl md:text-5xl font-bold text-black mb-8">
+                  Let's capture your <span className="text-blue-600">story</span>.
                 </h3>
-                <p className="text-blue-100/40 mb-12">
+                <p className="text-zinc-500 mb-12">
                   Ready to book your event or have questions? Get in touch with us via call or WhatsApp for a quick consultation.
                 </p>
 
                 <div className="space-y-8">
                   <div className="flex items-start gap-6">
-                    <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 flex-shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
                       <Phone className="w-6 h-6" />
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-blue-100/40 uppercase tracking-widest mb-1">Call Us</div>
-                      <a href={`tel:${phoneNumber}`} className="text-2xl font-bold text-white hover:text-blue-400 transition-colors">
+                      <div className="text-sm font-medium text-zinc-400 uppercase tracking-widest mb-1">Call Us</div>
+                      <a href={`tel:${phoneNumber}`} className="text-2xl font-bold text-black hover:text-blue-600 transition-colors">
                         +91 {phoneNumber}
                       </a>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-6">
-                    <div className="w-12 h-12 rounded-2xl bg-green-500/10 flex items-center justify-center text-green-400 flex-shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-green-50 flex items-center justify-center text-green-600 flex-shrink-0">
                       <MessageCircle className="w-6 h-6" />
                     </div>
                     <div>
-                      <div className="text-sm font-medium text-blue-100/40 uppercase tracking-widest mb-1">WhatsApp</div>
-                      <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-2xl font-bold text-white hover:text-green-400 transition-colors">
+                      <div className="text-sm font-medium text-zinc-400 uppercase tracking-widest mb-1">WhatsApp</div>
+                      <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-2xl font-bold text-black hover:text-green-600 transition-colors">
                         Chat with Us
                       </a>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-6">
-                    <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-400 flex-shrink-0">
-                      <MapPin className="w-6 h-6" />
+                    <div className="flex items-start gap-6">
+                      <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center text-red-600 flex-shrink-0">
+                        <MapPin className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium text-zinc-400 uppercase tracking-widest mb-1">Our Location</div>
+                        <div className="text-3xl font-black text-black tracking-tight">Bengaluru, Karnataka</div>
+                        <p className="text-zinc-500 font-bold mt-1 uppercase tracking-widest text-[10px]">Serving Pan India</p>
+                      </div>
                     </div>
-                    <div>
-                      <div className="text-sm font-medium text-blue-100/40 uppercase tracking-widest mb-1">Location</div>
-                      <div className="text-xl font-bold text-white">Bengaluru, Karnataka</div>
-                    </div>
-                  </div>
                 </div>
               </motion.div>
             </div>
@@ -77,7 +78,7 @@ export function Contact() {
               >
                 <div className="space-y-4">
                   <h4 className="text-3xl font-bold">Quick Enquiry</h4>
-                  <p className="text-blue-100/80">
+                  <p className="text-blue-50">
                     Average response time: <span className="font-bold text-white underline">Less than 30 mins</span>
                   </p>
                 </div>
