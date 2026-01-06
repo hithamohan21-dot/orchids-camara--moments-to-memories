@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { Play, Camera, ArrowLeft, Loader2, X } from "lucide-react";
+import { Play, Camera, ArrowLeft, Loader2, X, ExternalLink } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/Navbar";
@@ -15,10 +15,8 @@ function VideoThumbnail({ src, isHovered }: { src: string; isHovered: boolean })
   useEffect(() => {
     if (videoRef.current) {
       if (isHovered) {
-        // Unmute and play on hover
         videoRef.current.muted = false;
         videoRef.current.play().catch(() => {
-          // Fallback to muted play if browser blocks audio
           if (videoRef.current) {
             videoRef.current.muted = true;
             videoRef.current.play().catch(() => {});
@@ -36,10 +34,10 @@ function VideoThumbnail({ src, isHovered }: { src: string; isHovered: boolean })
     <video
       ref={videoRef}
       src={src}
-      className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110 opacity-100' : 'opacity-50 group-hover:opacity-80'}`}
+      className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110 opacity-100' : 'opacity-80 group-hover:opacity-100'}`}
       loop
       playsInline
-      muted // Start muted to satisfy autoplay policies
+      muted 
     />
   );
 }
@@ -84,6 +82,7 @@ export default function PortfolioPage() {
           setItems(data.map(item => ({
             type: item.type === 'image' ? 'photography' : 'videography',
             title: item.title,
+            client_name: item.client_name,
             category: item.category,
             sub_category: item.sub_category,
             image: item.url,
@@ -107,35 +106,35 @@ export default function PortfolioPage() {
   });
 
   return (
-    <main className="min-h-screen bg-white text-black">
+    <main className="min-h-screen bg-white text-black selection:bg-blue-500/10">
       <Navbar />
       
-      <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8">
+      <section className="pt-40 pb-32 px-4 md:px-24">
         <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-8">
+          <div className="flex flex-col items-center mb-24">
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="text-center md:text-left"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center mb-16"
             >
               <Button 
                 variant="ghost" 
-                className="mb-8 text-blue-600 hover:text-blue-700 -ml-4"
+                className="mb-12 text-zinc-400 hover:text-blue-600 font-bold uppercase tracking-[0.3em] text-[10px] group transition-all"
                 onClick={() => window.location.href = "/"}
               >
-                <ArrowLeft className="mr-2 h-4 w-4" />
+                <ArrowLeft className="mr-3 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
                 Back to Home
               </Button>
-              <h1 className="text-5xl md:text-7xl font-bold text-black mb-4 tracking-tighter">
-                Full Portfolio
+              <h1 className="text-6xl md:text-8xl font-medium text-black mb-6 tracking-tighter uppercase">
+                Portfolio
               </h1>
-              <p className="text-zinc-500 text-lg max-w-xl mx-auto md:mx-0">
-                A curated selection of our finest moments captured through the lens.
+              <p className="text-zinc-400 text-lg md:text-xl font-light max-w-2xl mx-auto uppercase tracking-[0.1em]">
+                Capturing life's most profound moments with cinematic precision.
               </p>
             </motion.div>
 
-            <div className="flex flex-col gap-4 w-full md:w-auto">
-              <div className="flex gap-1.5 bg-zinc-100 p-1.5 rounded-2xl border border-zinc-200 justify-center scrollbar-hide">
+            <div className="flex flex-col gap-8 w-full max-w-5xl">
+              <div className="flex gap-2 bg-zinc-50 p-2 rounded-2xl border border-zinc-100 justify-center overflow-x-auto scrollbar-hide">
                 {["all", "photography", "videography"].map((f) => (
                   <button
                     key={f}
@@ -143,10 +142,10 @@ export default function PortfolioPage() {
                       setMainFilter(f);
                       setSubFilter("all");
                     }}
-                    className={`px-8 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${
+                    className={`px-10 py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.3em] transition-all duration-300 whitespace-nowrap ${
                       mainFilter === f 
-                        ? "bg-blue-600 text-white shadow-xl shadow-blue-600/30" 
-                        : "text-zinc-500 hover:text-black"
+                        ? "bg-white text-blue-600 shadow-sm border border-zinc-100" 
+                        : "text-zinc-400 hover:text-black"
                     }`}
                   >
                     {f}
@@ -155,11 +154,15 @@ export default function PortfolioPage() {
               </div>
 
               {mainFilter !== "all" && (
-                <div className="flex gap-2 overflow-x-auto pb-2 justify-center scrollbar-hide">
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex gap-3 overflow-x-auto pb-2 justify-center scrollbar-hide"
+                >
                   <button
                     onClick={() => setSubFilter("all")}
-                    className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap ${
-                      subFilter === "all" ? "bg-black text-white" : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200"
+                    className={`px-8 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] transition-all whitespace-nowrap ${
+                      subFilter === "all" ? "bg-black text-white" : "bg-zinc-50 text-zinc-400 hover:text-black border border-zinc-100"
                     }`}
                   >
                     All {mainFilter}
@@ -168,14 +171,14 @@ export default function PortfolioPage() {
                     <button
                       key={sub}
                       onClick={() => setSubFilter(sub)}
-                      className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all whitespace-nowrap ${
-                        subFilter === sub ? "bg-black text-white" : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200"
+                      className={`px-8 py-2.5 rounded-full text-[9px] font-bold uppercase tracking-[0.2em] transition-all whitespace-nowrap ${
+                        subFilter === sub ? "bg-black text-white" : "bg-zinc-50 text-zinc-400 hover:text-black border border-zinc-100"
                       }`}
                     >
                       {sub.replace(" Photography", "").replace(" Videography", "")}
                     </button>
                   ))}
-                </div>
+                </motion.div>
               )}
             </div>
           </div>
@@ -185,94 +188,101 @@ export default function PortfolioPage() {
               <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
             </div>
           ) : filteredItems.length === 0 ? (
-            <div className="text-center py-40 bg-zinc-50 rounded-[3rem] border-2 border-dashed border-zinc-200">
-              <p className="text-zinc-400 font-bold uppercase tracking-widest">No items found in this category</p>
+            <div className="text-center py-40">
+              <p className="text-zinc-300 font-bold uppercase tracking-[0.4em] text-xs">The collection is currently quiet.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-20">
               <AnimatePresence mode="popLayout">
-                  {filteredItems.map((item) => (
-                      <motion.div
-                        key={item.id || item.title}
-                        layout
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        transition={{ duration: 0.5 }}
-                        className="group relative aspect-square rounded-[2.5rem] overflow-hidden cursor-pointer bg-zinc-100 border border-zinc-200 hover:border-blue-600 transition-all duration-500 shadow-2xl shadow-black/5"
-                        onMouseEnter={() => item.type === 'videography' && setHoveredVideo(item.id || item.title)}
-                        onMouseLeave={() => setHoveredVideo(null)}
-                        onClick={() => {
-                          if (item.type === 'videography' && item.videoUrl) {
-                            setSelectedVideo(item.videoUrl);
-                          } else if (item.type === 'photography') {
-                            setSelectedImage(item.image);
-                          }
-                        }}
-                      >
-                        {item.type === 'photography' ? (
-                          <Image
-                            src={item.image}
-                            alt={item.title}
-                            fill
-                            className="object-cover transition-all duration-700 group-hover:scale-110"
+                {filteredItems.map((item, idx) => (
+                  <motion.div
+                    key={item.id || item.title}
+                    layout
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.8, ease: [0.21, 0.45, 0.32, 0.9] }}
+                    className="group cursor-pointer"
+                    onMouseEnter={() => item.type === 'videography' && setHoveredVideo(item.id || item.title)}
+                    onMouseLeave={() => setHoveredVideo(null)}
+                    onClick={() => {
+                      if (item.type === 'videography' && item.videoUrl) {
+                        setSelectedVideo(item.videoUrl);
+                      } else if (item.type === 'photography') {
+                        setSelectedImage(item.image);
+                      }
+                    }}
+                  >
+                    <div className="relative aspect-[3/4] overflow-hidden bg-zinc-50 mb-8 rounded-sm">
+                      {item.type === 'photography' ? (
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="absolute inset-0">
+                          <VideoThumbnail 
+                            src={item.videoUrl} 
+                            isHovered={hoveredVideo === (item.id || item.title)} 
                           />
-                        ) : (
-                          <div className="absolute inset-0">
-                            <VideoThumbnail 
-                              src={item.videoUrl} 
-                              isHovered={hoveredVideo === (item.id || item.title)} 
-                            />
-                            {hoveredVideo !== (item.id || item.title) && (
-                              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform border border-white/30">
-                                  <Play className="w-8 h-8 text-white fill-current" />
-                                </div>
-                              </div>
-                            )}
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/5 group-hover:bg-transparent transition-colors duration-500">
+                            <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform border border-white/20">
+                              <Play className="w-8 h-8 text-white fill-current translate-x-0.5" />
+                            </div>
                           </div>
-                        )}
-                        
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-100 transition-opacity z-10" />
-                      
-                        <div className="absolute inset-0 flex flex-col justify-end p-8 z-20">
-                          <div className="flex items-center gap-3 mb-4 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <span className="p-2.5 rounded-2xl bg-blue-600 text-white shadow-xl">
-                              {item.type === "videography" ? <Play className="w-4 h-4 fill-current" /> : <Camera className="w-4 h-4" />}
-                            </span>
-                            <span className="text-xs font-black text-white uppercase tracking-[0.2em]">{item.sub_category}</span>
-                          </div>
-                          <h4 className="text-2xl font-black text-white mb-2 group-hover:text-blue-500 transition-colors duration-300 line-clamp-2">{item.title}</h4>
                         </div>
-                      </motion.div>
-                  ))}
+                      )}
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-2xl font-medium text-black uppercase tracking-tight">{item.title}</h4>
+                        <span className="text-[9px] font-black text-blue-600 uppercase tracking-widest">{item.type}</span>
+                      </div>
+                      <p className="text-zinc-400 text-xs font-bold uppercase tracking-[0.3em]">{item.client_name || "Private Client"}</p>
+                    </div>
+                  </motion.div>
+                ))}
               </AnimatePresence>
             </div>
           )}
         </div>
       </section>
 
-      {/* Image Modal */}
+      {/* Footer-like CTA */}
+      <section className="py-32 bg-zinc-50 border-t border-zinc-100">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl md:text-6xl font-medium text-black mb-12 tracking-tight uppercase">Ready to tell your story?</h2>
+          <Button 
+            size="lg"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-12 h-20 rounded-full text-xs font-bold uppercase tracking-[0.4em] shadow-2xl shadow-blue-600/20"
+            onClick={() => window.location.href = "/#contact"}
+          >
+            Get in Touch
+          </Button>
+        </div>
+      </section>
+
+      {/* Modals */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-12"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/98 p-4 md:p-12"
             onClick={() => setSelectedImage(null)}
           >
-            <button 
-              onClick={() => setSelectedImage(null)}
-              className="absolute top-6 right-6 text-white hover:text-blue-400 transition-colors z-[110]"
-            >
-              <X className="w-10 h-10" />
+            <button className="absolute top-8 right-8 text-white hover:text-blue-400 transition-colors z-[110]">
+              <X className="w-12 h-12" />
             </button>
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-6xl aspect-[4/5] md:aspect-auto md:h-[85vh] bg-black rounded-3xl overflow-hidden shadow-2xl"
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-7xl aspect-[4/5] md:aspect-auto md:h-[90vh]"
               onClick={(e) => e.stopPropagation()}
             >
               <Image
@@ -286,26 +296,25 @@ export default function PortfolioPage() {
         )}
       </AnimatePresence>
 
-      {/* Video Modal */}
       <AnimatePresence>
         {selectedVideo && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-12"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/98 p-4 md:p-12"
           >
             <button 
               onClick={() => setSelectedVideo(null)}
-              className="absolute top-6 right-6 text-white hover:text-blue-400 transition-colors z-[110]"
+              className="absolute top-8 right-8 text-white hover:text-blue-400 transition-colors z-[110]"
             >
-              <X className="w-10 h-10" />
+              <X className="w-12 h-12" />
             </button>
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-6xl aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl"
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-7xl aspect-video bg-black"
             >
               <video
                 src={selectedVideo}

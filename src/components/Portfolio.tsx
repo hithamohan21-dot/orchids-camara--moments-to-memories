@@ -35,7 +35,7 @@ function VideoThumbnail({ src, isHovered }: { src: string; isHovered: boolean })
     <video
       ref={videoRef}
       src={src}
-      className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110 opacity-100' : 'opacity-50 group-hover:opacity-80'}`}
+      className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110 opacity-100' : 'opacity-80 group-hover:opacity-100'}`}
       loop
       playsInline
       muted // Start muted to satisfy autoplay policies
@@ -64,112 +64,92 @@ const staticPortfolioItems = [
   },
 ];
 
-  const subCategoriesMap: Record<string, string[]> = {
-    "Photography": [
-      "Wedding Photography",
-      "Candid Photography",
-      "Pre-Wedding Photography",
-      "Event Photography",
-      "Corporate Photography"
-    ],
-    "Videography": [
-      "Wedding Videography",
-      "Candid Videography",
-      "Pre-Wedding Videography",
-      "Event Videography",
-      "Corporate Videography"
-    ]
-  };
+const subCategoriesMap: Record<string, string[]> = {
+  "Photography": [
+    "Wedding Photography",
+    "Candid Photography",
+    "Pre-Wedding Photography",
+    "Event Photography",
+    "Corporate Photography"
+  ],
+  "Videography": [
+    "Wedding Videography",
+    "Candid Videography",
+    "Pre-Wedding Videography",
+    "Event Videography",
+    "Corporate Videography"
+  ]
+};
 
-  export function Portfolio() {
-    const [mainFilter, setMainFilter] = useState("all");
-    const [subFilter, setSubFilter] = useState("all");
-    const [items, setItems] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
-    const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
-  
-    useEffect(() => {
-      async function fetchItems() {
-        try {
-          const { data, error } = await supabase
-            .from("portfolio")
-            .select("*")
-            .order("created_at", { ascending: false });
-  
-          if (error) throw error;
-          
-          if (data && data.length > 0) {
-            setItems(data.map(item => ({
-              type: item.type === 'image' ? 'photography' : 'videography',
-              title: item.title,
-              category: item.category,
-              sub_category: item.sub_category,
-              image: item.url,
-              videoUrl: item.type === 'video' ? item.url : null,
-              id: item.id
-            })));
-          } else {
-            setItems(staticPortfolioItems);
-          }
-        } catch (error) {
-          console.error("Error fetching portfolio:", error);
-          setItems(staticPortfolioItems);
-        } finally {
-          setLoading(false);
+export function Portfolio() {
+  const [mainFilter, setMainFilter] = useState("all");
+  const [subFilter, setSubFilter] = useState("all");
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchItems() {
+      try {
+        const { data, error } = await supabase
+          .from("portfolio")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          setItems(data.map(item => ({
+            type: item.type === 'image' ? 'photography' : 'videography',
+            title: item.title,
+            client_name: item.client_name,
+            category: item.category,
+            sub_category: item.sub_category,
+            image: item.url,
+            videoUrl: item.type === 'video' ? item.url : null,
+            id: item.id
+          })));
+        } else {
+          setItems(staticPortfolioItems.map(item => ({ ...item, client_name: "Private Client" })));
         }
+      } catch (error) {
+        console.error("Error fetching portfolio:", error);
+        setItems(staticPortfolioItems.map(item => ({ ...item, client_name: "Private Client" })));
+      } finally {
+        setLoading(false);
       }
-      fetchItems();
-    }, []);
-  
-    const filteredItems = items.filter(item => {
-      const matchMain = mainFilter === "all" || item.type === mainFilter;
-      const matchSub = subFilter === "all" || item.sub_category === subFilter;
-      return matchMain && matchSub;
-    });
+    }
+    fetchItems();
+  }, []);
 
-    const scrollRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-      const scrollContainer = scrollRef.current;
-      if (!scrollContainer || loading) return;
-
-      let animationFrameId: number;
-      let scrollPos = 0;
-
-      const scroll = () => {
-        scrollPos += 0.5; // Very slow move
-        if (scrollPos >= scrollContainer.scrollWidth / 2) {
-          scrollPos = 0;
-        }
-        scrollContainer.scrollLeft = scrollPos;
-        animationFrameId = requestAnimationFrame(scroll);
-      };
-
-      animationFrameId = requestAnimationFrame(scroll);
-      return () => cancelAnimationFrame(animationFrameId);
-    }, [loading, items, mainFilter, subFilter]);
+  const filteredItems = items.filter(item => {
+    const matchMain = mainFilter === "all" || item.type === mainFilter;
+    const matchSub = subFilter === "all" || item.sub_category === subFilter;
+    return matchMain && matchSub;
+  });
 
   return (
     <section id="portfolio" className="py-24 bg-white overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-8 text-center md:text-left">
+      <div className="container mx-auto">
+        <div className="flex flex-col items-center mb-20 px-4">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            className="text-center mb-12"
           >
-            <h2 className="text-blue-600 font-medium tracking-widest uppercase mb-4">
-              Portfolio
+            <h2 className="text-blue-600 font-bold uppercase tracking-[0.4em] text-xs mb-4">
+              Our Collection
             </h2>
-            <h3 className="text-4xl md:text-5xl font-bold text-black">
-              Our Recent Work
+            <h3 className="text-5xl md:text-7xl font-medium text-black tracking-tight">
+              Curated Stories.
             </h3>
           </motion.div>
 
-          <div className="flex flex-col gap-4 w-full md:w-auto">
-            <div className="flex gap-1.5 bg-zinc-100 p-1.5 rounded-2xl border border-zinc-200 justify-center scrollbar-hide">
+          <div className="flex flex-col gap-6 w-full max-w-4xl">
+            <div className="flex gap-2 bg-zinc-50 p-2 rounded-2xl border border-zinc-100 justify-center overflow-x-auto scrollbar-hide">
               {["all", "photography", "videography"].map((f) => (
                 <button
                   key={f}
@@ -177,23 +157,27 @@ const staticPortfolioItems = [
                     setMainFilter(f);
                     setSubFilter("all");
                   }}
-                  className={`px-4 md:px-6 py-2 rounded-xl text-sm font-bold transition-all duration-300 whitespace-nowrap ${
+                  className={`px-8 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${
                     mainFilter === f 
-                      ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" 
-                      : "text-zinc-500 hover:text-black"
+                      ? "bg-white text-blue-600 shadow-sm border border-zinc-100" 
+                      : "text-zinc-400 hover:text-black"
                   }`}
                 >
-                  {f.charAt(0).toUpperCase() + f.slice(1)}
+                  {f}
                 </button>
               ))}
             </div>
 
             {mainFilter !== "all" && (
-              <div className="flex gap-1.5 overflow-x-auto pb-2 justify-center scrollbar-hide">
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex gap-2 overflow-x-auto pb-2 justify-center scrollbar-hide"
+              >
                 <button
                   onClick={() => setSubFilter("all")}
-                  className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${
-                    subFilter === "all" ? "bg-black text-white" : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200"
+                  className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
+                    subFilter === "all" ? "bg-black text-white" : "bg-zinc-50 text-zinc-400 hover:text-black border border-zinc-100"
                   }`}
                 >
                   All {mainFilter}
@@ -202,14 +186,14 @@ const staticPortfolioItems = [
                   <button
                     key={sub}
                     onClick={() => setSubFilter(sub)}
-                    className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
-                      subFilter === sub ? "bg-black text-white" : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200"
+                    className={`px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
+                      subFilter === sub ? "bg-black text-white" : "bg-zinc-50 text-zinc-400 hover:text-black border border-zinc-100"
                     }`}
                   >
                     {sub.replace(" Photography", "").replace(" Videography", "")}
                   </button>
                 ))}
-              </div>
+              </motion.div>
             )}
           </div>
         </div>
@@ -219,20 +203,16 @@ const staticPortfolioItems = [
             <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
           </div>
         ) : (
-          <div className="relative group/slider">
-            <div 
-              ref={scrollRef}
-              className="flex gap-8 overflow-x-hidden pb-12 pointer-events-auto"
-              style={{ scrollBehavior: 'auto' }}
-            >
-              {[...filteredItems, ...filteredItems, ...filteredItems].map((item, idx) => (
+          <div className="px-4 md:px-24">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-16">
+              {filteredItems.slice(0, 8).map((item, idx) => (
                 <motion.div
-                  key={item.id ? `${item.id}-${idx}` : `${item.title}-${idx}`}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  key={item.id || `${item.title}-${idx}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: (idx % filteredItems.length) * 0.1 }}
-                  className="flex-shrink-0 w-[300px] md:w-[450px] snap-center"
+                  transition={{ delay: idx * 0.1, duration: 0.8, ease: [0.21, 0.45, 0.32, 0.9] }}
+                  className="group cursor-pointer"
                   onMouseEnter={() => item.type === 'videography' && setHoveredVideo(item.id || item.title)}
                   onMouseLeave={() => setHoveredVideo(null)}
                   onClick={() => {
@@ -243,13 +223,13 @@ const staticPortfolioItems = [
                     }
                   }}
                 >
-                  <div className="group relative aspect-[16/10] rounded-3xl overflow-hidden cursor-pointer bg-zinc-100 border border-zinc-200 hover:border-blue-600 transition-all duration-500 shadow-xl shadow-black/5">
+                  <div className="relative aspect-[3/4] overflow-hidden bg-zinc-50 mb-8 rounded-sm">
                     {item.type === 'photography' ? (
                       <Image
                         src={item.image}
                         alt={item.title}
                         fill
-                        className="object-cover transition-all duration-700 group-hover:scale-110"
+                        className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                       />
                     ) : (
                       <div className="absolute inset-0">
@@ -257,46 +237,34 @@ const staticPortfolioItems = [
                           src={item.videoUrl} 
                           isHovered={hoveredVideo === (item.id || item.title)} 
                         />
-                        {hoveredVideo !== (item.id || item.title) && (
-                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform border border-white/30">
-                              <Play className="w-6 h-6 text-white fill-current" />
-                            </div>
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/5 group-hover:bg-transparent transition-colors duration-500">
+                          <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform border border-white/20">
+                            <Play className="w-8 h-8 text-white fill-current translate-x-0.5" />
                           </div>
-                        )}
+                        </div>
                       </div>
                     )}
-                    
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity z-10" />
+                  </div>
                   
-                    <div className="absolute inset-0 flex flex-col justify-end p-6 z-20">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="p-1.5 rounded-lg bg-blue-600 text-white">
-                          {item.type === "videography" ? <Play className="w-3 h-3 fill-current" /> : <Camera className="w-3 h-3" />}
-                        </span>
-                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">{item.category}</span>
-                      </div>
-                      <h4 className="text-xl font-bold text-white mb-1 truncate">{item.title}</h4>
-                    </div>
+                  <div className="space-y-2">
+                    <h4 className="text-2xl font-medium text-black uppercase tracking-tight">{item.title}</h4>
+                    <p className="text-zinc-400 text-xs font-bold uppercase tracking-[0.3em]">{item.client_name || "Private Client"}</p>
                   </div>
                 </motion.div>
               ))}
             </div>
-            
-            {/* Gradient Mask for Slider */}
-            <div className="absolute top-0 bottom-12 left-0 w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10 hidden md:block" />
-            <div className="absolute top-0 bottom-12 right-0 w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 hidden md:block" />
           </div>
         )}
 
-        <div className="mt-8 text-center">
+        <div className="mt-24 text-center">
           <Button
             size="lg"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-10 h-16 rounded-full text-lg group shadow-xl shadow-blue-600/20"
+            variant="ghost"
+            className="text-black hover:text-blue-600 px-12 h-16 rounded-full text-xs font-bold uppercase tracking-[0.4em] group transition-all border border-zinc-200 hover:border-blue-600"
             onClick={() => window.location.href = "/portfolio"}
           >
-            View Full Portfolio
-            <ExternalLink className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            Explore Full Portfolio
+            <ExternalLink className="ml-4 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Button>
         </div>
       </div>
@@ -313,15 +281,15 @@ const staticPortfolioItems = [
           >
             <button 
               onClick={() => setSelectedImage(null)}
-              className="absolute top-6 right-6 text-white hover:text-blue-400 transition-colors z-[110]"
+              className="absolute top-8 right-8 text-white hover:text-blue-400 transition-colors z-[110]"
             >
-              <X className="w-8 h-8" />
+              <X className="w-10 h-10" />
             </button>
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-5xl aspect-[4/5] md:aspect-auto md:h-[80vh] bg-black rounded-2xl overflow-hidden shadow-2xl"
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-6xl aspect-[4/5] md:aspect-auto md:h-[85vh] bg-black overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <Image
@@ -346,15 +314,15 @@ const staticPortfolioItems = [
           >
             <button 
               onClick={() => setSelectedVideo(null)}
-              className="absolute top-6 right-6 text-white hover:text-blue-400 transition-colors z-[110]"
+              className="absolute top-8 right-8 text-white hover:text-blue-400 transition-colors z-[110]"
             >
-              <X className="w-8 h-8" />
+              <X className="w-10 h-10" />
             </button>
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl"
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative w-full max-w-6xl aspect-video bg-black overflow-hidden"
             >
               <video
                 src={selectedVideo}

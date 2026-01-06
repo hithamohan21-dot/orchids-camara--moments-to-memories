@@ -14,6 +14,7 @@ interface PortfolioItem {
   id: string;
   title: string;
   description: string;
+  client_name: string;
   type: 'image' | 'video';
   url: string;
   category: string;
@@ -46,6 +47,7 @@ export function AdminPortfolioManager() {
   const [newItem, setNewItem] = useState({
     title: "",
     description: "",
+    client_name: "",
     type: "image" as "image" | "video",
     category: mainCategories[0],
     sub_category: subCategoriesMap[mainCategories[0]][0]
@@ -108,27 +110,29 @@ export function AdminPortfolioManager() {
         finalUrl = publicUrl;
       }
 
-      const { error: dbError } = await supabase
-        .from('portfolio')
-        .insert([{
-          title: newItem.title,
-          description: newItem.description,
-          type: newItem.type,
-          url: finalUrl,
-          category: newItem.category,
-          sub_category: newItem.sub_category
-        }]);
+        const { error: dbError } = await supabase
+          .from('portfolio')
+          .insert([{
+            title: newItem.title,
+            description: newItem.description,
+            client_name: newItem.client_name,
+            type: newItem.type,
+            url: finalUrl,
+            category: newItem.category,
+            sub_category: newItem.sub_category
+          }]);
 
-      if (dbError) throw dbError;
+        if (dbError) throw dbError;
 
-      toast.success("Item added successfully");
-      setNewItem({ 
-        title: "", 
-        description: "", 
-        type: "image", 
-        category: mainCategories[0],
-        sub_category: subCategoriesMap[mainCategories[0]][0]
-      });
+        toast.success("Item added successfully");
+        setNewItem({ 
+          title: "", 
+          description: "", 
+          client_name: "",
+          type: "image", 
+          category: mainCategories[0],
+          sub_category: subCategoriesMap[mainCategories[0]][0]
+        });
       setFile(null);
       fetchItems();
     } catch (error: any) {
@@ -180,6 +184,16 @@ export function AdminPortfolioManager() {
                   value={newItem.title}
                   onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
                   placeholder="Ex: Sharma Wedding Highlights"
+                  className="rounded-xl border-zinc-200 focus:ring-blue-600 h-12"
+                />
+              </div>
+
+              <div>
+                <Label className="text-zinc-500 font-bold uppercase tracking-widest text-[10px] mb-2 block">Client Name</Label>
+                <Input
+                  value={newItem.client_name}
+                  onChange={(e) => setNewItem({ ...newItem, client_name: e.target.value })}
+                  placeholder="Ex: Rahul & Priya"
                   className="rounded-xl border-zinc-200 focus:ring-blue-600 h-12"
                 />
               </div>
