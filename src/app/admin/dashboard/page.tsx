@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { LogOut, LayoutDashboard, Star, Settings, Menu, X as CloseIcon } from "lucide-react";
-import { AdminPortfolioManager } from "../../../components/AdminPortfolioManager";
-import { AdminReviewsManager } from "../../../components/AdminReviewsManager";
-import { AdminSettingsManager } from "../../../components/AdminSettingsManager";
+import { LogOut, LayoutDashboard, Star, Settings, Menu, X as CloseIcon, Layout } from "lucide-react";
+import { AdminPortfolioManager } from "@/components/AdminPortfolioManager";
+import { AdminReviewsManager } from "@/components/AdminReviewsManager";
+import { AdminSettingsManager } from "@/components/AdminSettingsManager";
+import { AdminHeroManager } from "@/components/AdminHeroManager";
 import { toast } from "sonner";
 import { Logo } from "@/components/Logo";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,7 +15,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function AdminDashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("portfolio");
+  const [activeTab, setActiveTab] = useState("hero");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
 
@@ -41,6 +42,7 @@ export default function AdminDashboardPage() {
   if (!user) return null;
 
   const menuItems = [
+    { id: "hero", label: "Hero Section", icon: Layout },
     { id: "portfolio", label: "Portfolio", icon: LayoutDashboard },
     { id: "reviews", label: "Reviews", icon: Star },
     { id: "settings", label: "Settings", icon: Settings },
@@ -159,6 +161,7 @@ export default function AdminDashboardPage() {
 
         {/* Dashboard Content */}
         <div className="p-4 sm:p-8 md:p-12 max-w-7xl mx-auto">
+          {activeTab === "hero" && <AdminHeroManager />}
           {activeTab === "portfolio" && <AdminPortfolioManager />}
           {activeTab === "reviews" && <AdminReviewsManager />}
           {activeTab === "settings" && <AdminSettingsManager />}

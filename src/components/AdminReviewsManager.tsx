@@ -273,41 +273,43 @@ export function AdminReviewsManager() {
         ) : (
           <div className="grid grid-cols-1 gap-6">
             {reviews.map((review) => (
-              <div key={review.id} className="bg-white border border-zinc-200 rounded-3xl p-8 flex flex-col md:flex-row gap-8 items-start justify-between hover:shadow-xl transition-all duration-300">
-                <div className="flex gap-6 flex-1">
-                  <div className="w-16 h-16 rounded-2xl bg-zinc-50 flex items-center justify-center text-zinc-300 overflow-hidden flex-shrink-0">
-                    {review.author_image_url ? (
-                      <Image 
-                        src={review.author_image_url} 
-                        alt={review.author_name} 
-                        width={64} 
-                        height={64} 
-                        className="w-full h-full object-cover"
-                      />
-                    ) : <User className="w-8 h-8" />}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <h4 className="text-xl font-bold">{review.author_name}</h4>
-                      <div className="flex">
-                        {[...Array(review.rating)].map((_, i) => (
-                          <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                        ))}
+                <div key={review.id} className="bg-white border border-zinc-200 rounded-3xl p-8 flex flex-col md:flex-row gap-8 items-start justify-between hover:shadow-xl transition-all duration-300">
+                    <div className="flex gap-6 flex-1">
+                      <div className="w-32 h-32 rounded-3xl bg-zinc-50 flex items-center justify-center text-zinc-300 overflow-hidden flex-shrink-0 shadow-sm border border-zinc-100">
+                        {review.author_image_url ? (
+                          <Image 
+                            src={review.author_image_url} 
+                            alt={review.author_name} 
+                            width={128} 
+                            height={128} 
+                            className="w-full h-full object-cover"
+                          />
+                        ) : <User className="w-12 h-12" />}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-3 mb-2">
+                          <h4 className="text-xl font-bold">{review.author_name}</h4>
+                          <div className="flex">
+                            {[...Array(review.rating)].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            ))}
+                          </div>
+                        </div>
+                        <p className="text-zinc-500 leading-relaxed max-w-2xl italic">"{review.review_text}"</p>
+                        
+                        {review.photos && review.photos.length > 0 && (
+                          <div className="flex gap-3 mt-6">
+                            {review.photos.map((photo, i) => (
+                              <div key={i} className="w-28 h-28 rounded-xl overflow-hidden border-2 border-zinc-100 shadow-sm hover:scale-105 transition-transform">
+                                <Image src={photo} alt="Review" width={112} height={112} className="w-full h-full object-cover" />
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <p className="text-zinc-500 leading-relaxed max-w-2xl italic">"{review.review_text}"</p>
-                    
-                    {review.photos && review.photos.length > 0 && (
-                      <div className="flex gap-2 mt-4">
-                        {review.photos.map((photo, i) => (
-                          <div key={i} className="w-12 h-12 rounded-lg overflow-hidden border border-zinc-100">
-                            <Image src={photo} alt="Review" width={48} height={48} className="w-full h-full object-cover" />
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
+
+
 
                 <div className="flex items-center gap-3 w-full md:w-auto">
                   <Button
