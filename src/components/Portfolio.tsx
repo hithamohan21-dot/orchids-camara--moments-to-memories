@@ -154,151 +154,151 @@ const staticPortfolioItems = [
   return (
     <section id="portfolio" className="py-24 bg-white overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 md:mb-16 gap-6 md:gap-8 text-center md:text-left">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-blue-600 font-black tracking-[0.3em] uppercase text-[10px] mb-2 md:mb-4">
-                Portfolio
-              </h2>
-              <h3 className="text-xl md:text-5xl font-black text-black">
-                Our Recent Work
-              </h3>
-            </motion.div>
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-8 text-center md:text-left">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-blue-600 font-medium tracking-widest uppercase mb-4">
+              Portfolio
+            </h2>
+            <h3 className="text-4xl md:text-5xl font-bold text-black">
+              Our Recent Work
+            </h3>
+          </motion.div>
 
-            <div className="flex flex-col gap-3 md:gap-4 w-full md:w-auto">
-              <div className="flex gap-1.5 bg-zinc-100 p-1.5 rounded-xl md:rounded-2xl border border-zinc-200 justify-center scrollbar-hide overflow-x-auto">
-                {["all", "photography", "videography"].map((f) => (
+          <div className="flex flex-col gap-4 w-full md:w-auto">
+            <div className="flex gap-1.5 bg-zinc-100 p-1.5 rounded-2xl border border-zinc-200 justify-center scrollbar-hide">
+              {["all", "photography", "videography"].map((f) => (
+                <button
+                  key={f}
+                  onClick={() => {
+                    setMainFilter(f);
+                    setSubFilter("all");
+                  }}
+                  className={`px-4 md:px-6 py-2 rounded-xl text-sm font-bold transition-all duration-300 whitespace-nowrap ${
+                    mainFilter === f 
+                      ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" 
+                      : "text-zinc-500 hover:text-black"
+                  }`}
+                >
+                  {f.charAt(0).toUpperCase() + f.slice(1)}
+                </button>
+              ))}
+            </div>
+
+            {mainFilter !== "all" && (
+              <div className="flex gap-1.5 overflow-x-auto pb-2 justify-center scrollbar-hide">
+                <button
+                  onClick={() => setSubFilter("all")}
+                  className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${
+                    subFilter === "all" ? "bg-black text-white" : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200"
+                  }`}
+                >
+                  All {mainFilter}
+                </button>
+                {subCategoriesMap[mainFilter === "photography" ? "Photography" : "Videography"].map((sub) => (
                   <button
-                    key={f}
-                    onClick={() => {
-                      setMainFilter(f);
-                      setSubFilter("all");
-                    }}
-                    className={`px-4 md:px-6 py-2 rounded-lg md:rounded-xl text-[10px] md:text-sm font-bold transition-all duration-300 whitespace-nowrap ${
-                      mainFilter === f 
-                        ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" 
-                        : "text-zinc-500 hover:text-black"
+                    key={sub}
+                    onClick={() => setSubFilter(sub)}
+                    className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
+                      subFilter === sub ? "bg-black text-white" : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200"
                     }`}
                   >
-                    {f.charAt(0).toUpperCase() + f.slice(1)}
+                    {sub.replace(" Photography", "").replace(" Videography", "")}
                   </button>
                 ))}
               </div>
-
-              {mainFilter !== "all" && (
-                <div className="flex gap-1.5 overflow-x-auto pb-2 justify-center scrollbar-hide">
-                  <button
-                    onClick={() => setSubFilter("all")}
-                    className={`px-3 py-1.5 rounded-full text-[8px] md:text-[10px] font-bold uppercase tracking-widest transition-all ${
-                      subFilter === "all" ? "bg-black text-white" : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200"
-                    }`}
-                  >
-                    All {mainFilter}
-                  </button>
-                  {subCategoriesMap[mainFilter === "photography" ? "Photography" : "Videography"].map((sub) => (
-                    <button
-                      key={sub}
-                      onClick={() => setSubFilter(sub)}
-                      className={`px-3 py-1.5 rounded-full text-[8px] md:text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
-                        subFilter === sub ? "bg-black text-white" : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200"
-                      }`}
-                    >
-                      {sub.replace(" Photography", "").replace(" Videography", "")}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            )}
           </div>
+        </div>
 
-          {loading ? (
-            <div className="flex justify-center py-20">
-              <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
-            </div>
-          ) : (
-            <div className="relative group/slider">
-              <div 
-                ref={scrollRef}
-                className="flex gap-4 md:gap-8 overflow-x-hidden pb-8 md:pb-12 pointer-events-auto"
-                style={{ scrollBehavior: 'auto' }}
-              >
-                {[...filteredItems, ...filteredItems, ...filteredItems].map((item, idx) => (
-                  <motion.div
-                    key={item.id ? `${item.id}-${idx}` : `${item.title}-${idx}`}
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: (idx % filteredItems.length) * 0.1 }}
-                    className="flex-shrink-0 w-[240px] md:w-[450px] snap-center"
-                    onMouseEnter={() => item.type === 'videography' && setHoveredVideo(item.id || item.title)}
-                    onMouseLeave={() => setHoveredVideo(null)}
-                    onClick={() => {
-                      if (item.type === 'videography' && item.videoUrl) {
-                        setSelectedVideo(item.videoUrl);
-                      } else if (item.type === 'photography') {
-                        setSelectedImage(item.image);
-                      }
-                    }}
-                  >
-                    <div className="group relative aspect-[16/10] rounded-2xl md:rounded-3xl overflow-hidden cursor-pointer bg-zinc-100 border border-zinc-200 hover:border-blue-600 transition-all duration-500 shadow-lg md:shadow-xl shadow-black/5">
-                      {item.type === 'photography' ? (
-                        <Image
-                          src={item.image}
-                          alt={item.title}
-                          fill
-                          className="object-cover transition-all duration-700 group-hover:scale-110"
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
+          </div>
+        ) : (
+          <div className="relative group/slider">
+            <div 
+              ref={scrollRef}
+              className="flex gap-8 overflow-x-hidden pb-12 pointer-events-auto"
+              style={{ scrollBehavior: 'auto' }}
+            >
+              {[...filteredItems, ...filteredItems, ...filteredItems].map((item, idx) => (
+                <motion.div
+                  key={item.id ? `${item.id}-${idx}` : `${item.title}-${idx}`}
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: (idx % filteredItems.length) * 0.1 }}
+                  className="flex-shrink-0 w-[300px] md:w-[450px] snap-center"
+                  onMouseEnter={() => item.type === 'videography' && setHoveredVideo(item.id || item.title)}
+                  onMouseLeave={() => setHoveredVideo(null)}
+                  onClick={() => {
+                    if (item.type === 'videography' && item.videoUrl) {
+                      setSelectedVideo(item.videoUrl);
+                    } else if (item.type === 'photography') {
+                      setSelectedImage(item.image);
+                    }
+                  }}
+                >
+                  <div className="group relative aspect-[16/10] rounded-3xl overflow-hidden cursor-pointer bg-zinc-100 border border-zinc-200 hover:border-blue-600 transition-all duration-500 shadow-xl shadow-black/5">
+                    {item.type === 'photography' ? (
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover transition-all duration-700 group-hover:scale-110"
+                      />
+                    ) : (
+                      <div className="absolute inset-0">
+                        <VideoThumbnail 
+                          src={item.videoUrl} 
+                          isHovered={hoveredVideo === (item.id || item.title)} 
                         />
-                      ) : (
-                        <div className="absolute inset-0">
-                          <VideoThumbnail 
-                            src={item.videoUrl} 
-                            isHovered={hoveredVideo === (item.id || item.title)} 
-                          />
-                          {hoveredVideo !== (item.id || item.title) && (
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                              <div className="w-10 h-10 md:w-16 md:h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform border border-white/30">
-                                <Play className="w-4 h-4 md:w-6 md:h-6 text-white fill-current" />
-                              </div>
+                        {hoveredVideo !== (item.id || item.title) && (
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:scale-110 transition-transform border border-white/30">
+                              <Play className="w-6 h-6 text-white fill-current" />
                             </div>
-                          )}
-                        </div>
-                      )}
-                      
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity z-10" />
-                    
-                      <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-6 z-20">
-                        <div className="flex items-center gap-1.5 md:gap-2 mb-1.5 md:mb-2">
-                          <span className="p-1 md:p-1.5 rounded-lg bg-blue-600 text-white">
-                            {item.type === "videography" ? <Play className="w-2.5 h-2.5 md:w-3 md:h-3 fill-current" /> : <Camera className="w-2.5 h-2.5 md:w-3 md:h-3" />}
-                          </span>
-                          <span className="text-[8px] md:text-[10px] font-bold text-white uppercase tracking-widest">{item.category}</span>
-                        </div>
-                        <h4 className="text-sm md:text-xl font-bold text-white mb-0.5 md:mb-1 truncate">{item.title}</h4>
+                          </div>
+                        )}
                       </div>
+                    )}
+                    
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity z-10" />
+                  
+                    <div className="absolute inset-0 flex flex-col justify-end p-6 z-20">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="p-1.5 rounded-lg bg-blue-600 text-white">
+                          {item.type === "videography" ? <Play className="w-3 h-3 fill-current" /> : <Camera className="w-3 h-3" />}
+                        </span>
+                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">{item.category}</span>
+                      </div>
+                      <h4 className="text-xl font-bold text-white mb-1 truncate">{item.title}</h4>
                     </div>
-                  </motion.div>
-                ))}
-              </div>
-              
-              {/* Gradient Mask for Slider */}
-              <div className="absolute top-0 bottom-12 left-0 w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10 hidden md:block" />
-              <div className="absolute top-0 bottom-12 right-0 w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 hidden md:block" />
+                  </div>
+                </motion.div>
+              ))}
             </div>
-          )}
-  
-          <div className="mt-8 md:mt-12 text-center">
-            <Button
-              size="lg"
-              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-10 h-12 md:h-16 rounded-full text-sm md:text-lg group shadow-xl shadow-blue-600/20 font-black uppercase tracking-widest"
-              onClick={() => window.location.href = "/portfolio"}
-            >
-              View Full Portfolio
-              <ExternalLink className="ml-2 h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            
+            {/* Gradient Mask for Slider */}
+            <div className="absolute top-0 bottom-12 left-0 w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10 hidden md:block" />
+            <div className="absolute top-0 bottom-12 right-0 w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 hidden md:block" />
           </div>
+        )}
+
+        <div className="mt-8 text-center">
+          <Button
+            size="lg"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-10 h-16 rounded-full text-lg group shadow-xl shadow-blue-600/20"
+            onClick={() => window.location.href = "/portfolio"}
+          >
+            View Full Portfolio
+            <ExternalLink className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+          </Button>
+        </div>
       </div>
 
       {/* Image Modal */}

@@ -46,21 +46,21 @@ export function Hero() {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
                     </motion.div>
 
-                    <div className="flex flex-col sm:flex-row gap-4 md:gap-6 items-center justify-center w-full px-4 md:px-0">
+                    <div className="flex flex-col sm:flex-row gap-6 items-center justify-center w-full">
                         <Button
                             size="lg"
-                            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 md:px-10 h-12 md:h-16 rounded-full text-sm md:text-lg group shadow-xl shadow-blue-600/20 font-black uppercase tracking-widest"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-10 h-16 rounded-full text-lg group shadow-xl shadow-blue-600/20"
                             onClick={() => document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })}
                         >
                             View Portfolio
-                            <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1 transition-transform" />
+                            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                         </Button>
                         <Button
                             size="lg"
-                            className="w-full sm:w-auto bg-black hover:bg-zinc-900 text-white px-8 md:px-10 h-12 md:h-16 rounded-full text-sm md:text-lg shadow-xl font-black uppercase tracking-widest"
+                            className="bg-black hover:bg-zinc-900 text-white px-10 h-16 rounded-full text-lg shadow-xl"
                             onClick={() => window.location.href = "tel:9845374999"}
                         >
-                            <Phone className="mr-2 h-4 w-4 md:h-5 md:w-5" />
+                            <Phone className="mr-2 h-5 w-5" />
                             Call Now
                         </Button>
                     </div>

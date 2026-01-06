@@ -72,32 +72,32 @@ export function About() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-blue-600 font-black tracking-[0.3em] uppercase text-[10px] mb-2 md:mb-4">
+            <h2 className="text-blue-600 font-black tracking-[0.3em] uppercase text-xs mb-4">
               About Camara Crew
             </h2>
-            <h3 className="text-xl md:text-5xl font-black mb-6 md:mb-8 text-black leading-tight tracking-tighter">
+            <h3 className="text-2xl md:text-5xl font-black mb-8 text-black leading-tight tracking-tighter">
               Capturing your most precious <span className="text-blue-600">moments</span> with precision.
             </h3>
-            <p className="text-zinc-600 text-xs md:text-lg mb-8 md:mb-12 leading-relaxed">
+            <p className="text-zinc-600 text-sm md:text-lg mb-12 leading-relaxed">
               At CAMARA, we believe every event is a story waiting to be told. Based in Bengaluru, our professional team specializes in high-quality wedding and event coverage, ensuring that your memories are preserved in their most beautiful and emotional form.
             </p>
 
-            <div className="grid grid-cols-2 gap-3 md:gap-8 mb-8 md:mb-12">
-              <div className="p-4 md:p-8 rounded-2xl md:rounded-[2rem] bg-zinc-50 border border-zinc-100 flex flex-col items-center text-center">
-                <div className="text-2xl md:text-5xl font-black text-blue-600 mb-1 md:mb-2">
+            <div className="grid grid-cols-2 gap-4 md:gap-8 mb-12">
+              <div className="p-6 md:p-8 rounded-[2rem] bg-zinc-50 border border-zinc-100 flex flex-col items-center text-center">
+                <div className="text-3xl md:text-5xl font-black text-blue-600 mb-2">
                   <Counter value={1000} suffix="+" />
                 </div>
-                <div className="text-[7px] md:text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Clients Worked</div>
+                <div className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Clients Worked</div>
               </div>
-              <div className="p-4 md:p-8 rounded-2xl md:rounded-[2rem] bg-zinc-50 border border-zinc-100 flex flex-col items-center text-center">
-                <div className="text-2xl md:text-5xl font-black text-black mb-1 md:mb-2">
+              <div className="p-6 md:p-8 rounded-[2rem] bg-zinc-50 border border-zinc-100 flex flex-col items-center text-center">
+                <div className="text-3xl md:text-5xl font-black text-black mb-2">
                   <Counter value={32} suffix="+" />
                 </div>
-                <div className="text-[7px] md:text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Years Experience</div>
+                <div className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Years Experience</div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               {stats.map((stat, index) => (
                 <div key={index} className="flex gap-4">
                   <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600">

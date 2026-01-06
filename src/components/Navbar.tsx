@@ -31,7 +31,7 @@ export function Navbar() {
           scrolled ? "bg-white shadow-xl py-2" : "bg-transparent py-4"
         }`}
       >
-        <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
+        <div className="container mx-auto px-6 flex items-center justify-between">
           <Link href="/" className="transition-transform hover:scale-105 duration-300">
             <Logo />
           </Link>
@@ -56,8 +56,8 @@ export function Navbar() {
               </div>
 
           {/* Mobile Menu Toggle */}
-          <button className="md:hidden text-black p-2 bg-zinc-50 rounded-xl transition-all active:scale-95" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          <button className="md:hidden text-black p-2 bg-zinc-50 rounded-xl" onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
 
@@ -70,19 +70,19 @@ export function Navbar() {
               exit={{ opacity: 0, height: 0 }}
               className="absolute top-full left-0 right-0 bg-white border-b border-zinc-200 overflow-hidden md:hidden shadow-2xl"
             >
-                <div className="flex flex-col gap-1 p-3">
+                <div className="flex flex-col gap-1 p-4">
                   {navLinks.map((link) => (
                     <Link
                       key={link.name}
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.2em] py-3 px-4 hover:bg-zinc-50 hover:text-blue-600 rounded-xl transition-all"
+                      className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] py-3 px-4 hover:bg-zinc-50 hover:text-blue-600 rounded-xl transition-all"
                     >
                       {link.name}
                     </Link>
                   ))}
-                  <div className="pt-2">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl h-10 font-black uppercase tracking-widest text-[9px]" asChild>
+                  <div className="pt-2 px-2">
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl h-12 font-black uppercase tracking-widest text-[10px]" asChild>
                       <a href="tel:9845374999">
                         <Phone className="w-3 h-3 mr-2" />
                         Call Now
